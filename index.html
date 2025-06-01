@@ -1,125 +1,236 @@
 <!DOCTYPE html>
 <html lang="ro">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Platformă Învățare Mecanisme</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a; /* Fundal principal întunecat */
-            color: #f0f0f0; /* Text principal deschis */
+            background-color: #1a1a1a;
+            /* Fundal principal întunecat */
+            color: #f0f0f0;
+            /* Text principal deschis */
         }
+
         /* Scrollbar personalizat pentru un aspect mai modern */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #2c2c2c; /* Culoare fundal track scrollbar */
+            background: #2c2c2c;
+            /* Culoare fundal track scrollbar */
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #ffd700; /* Culoare thumb scrollbar (accent galben) */
+            background: #ffd700;
+            /* Culoare thumb scrollbar (accent galben) */
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #e6c300; /* Culoare thumb la hover */
+            background: #e6c300;
+            /* Culoare thumb la hover */
         }
 
         .header-bg {
-            background-color: rgba(34, 34, 34, 0.8); /* Fundal header semi-transparent */
-            backdrop-filter: blur(10px); /* Efect de blur pentru transparență */
-            border-bottom: 1px solid #ffd700; /* Linie subtilă galbenă */
+            background-color: rgba(34, 34, 34, 0.8);
+            /* Fundal header semi-transparent */
+            backdrop-filter: blur(10px);
+            /* Efect de blur pentru transparență */
+            border-bottom: 1px solid #ffd700;
+            /* Linie subtilă galbenă */
         }
+
         .nav-link {
             transition: color 0.3s ease, background-color 0.3s ease;
-            border-radius: 0.375rem; /* colțuri rotunjite md */
+            border-radius: 0.375rem;
+            /* colțuri rotunjite md */
         }
-        .nav-link:hover, .nav-link.active {
-            color: #1a1a1a; /* Text închis la hover/activ */
-            background-color: #ffd700; /* Fundal galben la hover/activ */
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #1a1a1a;
+            /* Text închis la hover/activ */
+            background-color: #ffd700;
+            /* Fundal galben la hover/activ */
         }
+
         .content-card {
-            background-color: rgba(44, 44, 44, 0.7); /* Fundal card semi-transparent */
+            background-color: rgba(44, 44, 44, 0.7);
+            /* Fundal card semi-transparent */
             backdrop-filter: blur(5px);
-            border: 1px solid #ffd700; /* Contur galben subtil */
+            border: 1px solid #ffd700;
+            /* Contur galben subtil */
         }
+
         .button-accent {
-            background-color: #ffd700; /* Buton accent galben */
-            color: #1a1a1a; /* Text închis pentru contrast */
+            background-color: #ffd700;
+            /* Buton accent galben */
+            color: #1a1a1a;
+            /* Text închis pentru contrast */
             transition: background-color 0.3s ease;
         }
+
         .button-accent:hover {
-            background-color: #e6c300; /* Galben mai închis la hover */
+            background-color: #e6c300;
+            /* Galben mai închis la hover */
         }
+
         .quiz-option {
             border: 1px solid #4a4a4a;
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
         }
+
         .quiz-option:hover {
             background-color: #2c2c2c;
             border-color: #ffd700;
         }
+
         .quiz-option.selected {
             background-color: #ffd700;
             color: #1a1a1a;
             border-color: #ffd700;
         }
+
         .correct-answer {
-            background-color: rgba(0, 255, 0, 0.2) !important;
-            border-left: 4px solid #00ff00;
+            background-color: rgba(76, 175, 80, 0.3) !important;
+            /* Verde subtil pentru corect */
+            border-left: 4px solid #4CAF50;
+            color: #c8e6c9;
+            /* Text mai deschis pentru lizibilitate pe fundal verde */
         }
+
         .incorrect-answer {
-            background-color: rgba(255, 0, 0, 0.2) !important;
-            border-left: 4px solid #ff0000;
+            background-color: rgba(244, 67, 54, 0.3) !important;
+            /* Roșu subtil pentru incorect */
+            border-left: 4px solid #f44336;
+            color: #ffcdd2;
+            /* Text mai deschis pentru lizibilitate pe fundal roșu */
         }
+
         .explanation {
             font-size: 0.875rem;
+            /* text-sm */
             color: #b0b0b0;
+            /* Gri mai deschis pentru explicații */
             margin-top: 0.5rem;
+            /* spațiu mic deasupra */
+            padding: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0.25rem;
         }
-        h1, h2, h3 {
-            color: #ffd700; /* Titluri galbene */
+
+        h1,
+        h2,
+        h3 {
+            color: #ffd700;
+            /* Titluri galbene */
         }
+
         h4 {
-            color: #f0f0f0; /* Sub-titluri mai deschise */
+            color: #f0f0f0;
+            /* Sub-titluri mai deschise */
         }
+
         .course-section {
-             margin-bottom: 2rem;
-             padding: 1.5rem;
-             border: 1px solid #ffd700;
-             border-radius: 0.5rem; /* colțuri rotunjite lg */
-             background-color: rgba(26, 26, 26, 0.3); /* Fundal ușor transparent pentru secțiuni */
+            /* Reused for data sections as well */
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #ffd700;
+            border-radius: 0.5rem;
+            /* colțuri rotunjite lg */
+            background-color: rgba(26, 26, 26, 0.3);
+            /* Fundal ușor transparent pentru secțiuni */
         }
+
         .course-section h3 {
+            /* Also for data section titles */
             margin-bottom: 1rem;
             border-bottom: 2px solid #ffd700;
             padding-bottom: 0.5rem;
         }
+
         .course-section h4 {
+            margin-top: 1.5rem;
+            /* Increased top margin for h4 */
+            margin-bottom: 0.75rem;
+            /* Increased bottom margin for h4 */
+            color: #e6c300;
+            /* Galben mai subtil pentru h4 */
+            font-size: 1.125rem;
+            /* text-lg for h4 */
+        }
+
+        .course-section h5 {
             margin-top: 1rem;
             margin-bottom: 0.5rem;
-            color: #e6c300; /* Galben mai subtil pentru h4 */
+            color: #f0f0f0;
+            font-size: 1rem;
+            /* text-base for h5 */
+            font-weight: 600;
+            /* semibold */
         }
+
         .course-section ul {
             list-style-type: disc;
             margin-left: 1.5rem;
         }
+
         .course-section li {
             margin-bottom: 0.5rem;
         }
-        .course-section p, .course-section li {
+
+        .course-section p,
+        .course-section li {
             line-height: 1.6;
         }
+
+        .data-pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.875rem;
+            /* text-sm */
+            color: #d1d5db;
+            /* text-gray-300 */
+            background-color: rgba(17, 24, 39, 0.5);
+            /* bg-gray-800 with some transparency */
+            padding: 1rem;
+            /* p-4 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            overflow-x: auto;
+            max-height: 500px;
+            /* Limitam inaltimea pentru lizibilitate */
+        }
+
         /* Stil pentru containerul principal pentru a centra conținutul și a adăuga padding */
         .main-container {
-            max-width: 1200px; /* Lățime maximă pentru conținut */
-            margin: 0 auto; /* Centrare automată */
+            max-width: 1200px;
+            /* Lățime maximă pentru conținut */
+            margin: 0 auto;
+            /* Centrare automată */
+        }
+
+        .formula {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col">
 
     <header class="header-bg sticky top-0 z-50 shadow-lg">
@@ -129,6 +240,7 @@
                 <a href="#" id="nav-acasa" class="nav-link px-3 py-2 text-lg font-medium">Acasă</a>
                 <a href="#" id="nav-cursuri" class="nav-link px-3 py-2 text-lg font-medium">Cursuri</a>
                 <a href="#" id="nav-quiz" class="nav-link px-3 py-2 text-lg font-medium">Quiz</a>
+                <a href="#" id="nav-data" class="nav-link px-3 py-2 text-lg font-medium">Date</a>
             </div>
         </nav>
     </header>
@@ -139,516 +251,1496 @@
                 <h2 class="text-3xl font-semibold mb-6">Bun venit!</h2>
                 <p class="text-lg mb-4">
                     Această platformă este dedicată învățării conceptelor fundamentale din domeniul mecanismelor.
-                    Explorează secțiunea <a href="#" class="text-yellow-400 hover:text-yellow-300 underline" onclick="showSection('cursuri')">Cursuri</a> pentru a aprofunda teoria și apoi testează-ți cunoștințele în secțiunea <a href="#" class="text-yellow-400 hover:text-yellow-300 underline" onclick="showSection('quiz')">Quiz</a>.
+                    Explorează secțiunea <a href="#" class="text-yellow-400 hover:text-yellow-300 underline"
+                        onclick="showSection('cursuri')">Cursuri</a> pentru a aprofunda teoria, secțiunea <a href="#"
+                        class="text-yellow-400 hover:text-yellow-300 underline" onclick="showSection('data')">Date</a>
+                    pentru a consulta materialele brute și apoi testează-ți cunoștințele în secțiunea <a href="#"
+                        class="text-yellow-400 hover:text-yellow-300 underline" onclick="showSection('quiz')">Quiz</a>.
                 </p>
                 <p class="text-lg">
-                    Informațiile sunt extrase din materialele furnizate și sunt structurate pentru o asimilare cât mai ușoară.
+                    Informațiile sunt extrase din materialele furnizate și sunt structurate pentru o asimilare cât mai
+                    ușoară. Platforma conține 11 cursuri detaliate.
                 </p>
             </div>
         </section>
 
         <section id="cursuri" class="content-section hidden">
             <div class="content-card p-6 sm:p-8 rounded-lg shadow-xl">
-                <h2 class="text-3xl font-semibold mb-6">Materiale de Curs</h2>
+                <h2 class="text-3xl font-semibold mb-6">Materiale de Curs Detaliate</h2>
 
                 <div class="course-section">
-                    <h3 class="text-2xl font-semibold">1. Introducere și Noțiuni Fundamentale</h3>
-                    <p>Disciplina MECANISME are ca obiect studiul structural, cinematic, cinetostatic și dinamic al mecanismelor.</p>
-                    
+                    <h3 class="text-2xl font-semibold">Curs 1: Introducere și Noțiuni Fundamentale</h3>
+                    <p>Disciplina <strong>MECANISME</strong> are ca obiect studiul structural, cinematic, cinetostatic
+                        și dinamic al mecanismelor.</p>
+
                     <h4>1.1. Concepte Fundamentale</h4>
-                    <p><strong>Sistem:</strong> O mulțime de elemente între care se stabilesc legături, alcătuind un întreg organizat. Se caracterizează prin structură și stare.</p>
-                    <p><strong>Sistem Mecanic:</strong> Un sistem tehnic cu elemente corpuri solide capabile să transmită mișcări mecanice și forțe. Poate fi fix (ex: poduri) sau mobil (ex: mașini, mecanisme).</p>
-                    <p><strong>Mașină:</strong> Un sistem tehnic care transformă o formă de energie în lucru mecanic util sau invers.</p>
-                    <p><strong>Mecanism:</strong> Un sistem de corpuri solide mobile (elemente cinematice) legate între ele prin cuple cinematice, destinat transformării și transmiterii mișcării și forțelor.</p>
+                    <p><strong>Sistem:</strong> O mulțime de elemente interconectate ce formează un întreg organizat. Se
+                        caracterizează prin <strong>structură</strong> (elemente și legături) și <strong>stare</strong>
+                        (parametri la un moment dat).</p>
+                    <p><strong>Sistem Mecanic:</strong> Un sistem tehnic format din corpuri solide capabile să transmită
+                        mișcări și forțe. Poate fi:</p>
+                    <ul>
+                        <li><strong>Fix:</strong> Elementele nu transmit mișcări, doar forțe (ex: poduri, structuri de
+                            rezistență).</li>
+                        <li><strong>Mobil:</strong> Elementele transmit atât mișcări, cât și forțe (ex: mașini,
+                            mecanisme).</li>
+                    </ul>
+                    <p><strong>Mașină:</strong> Un sistem tehnic care transformă o formă de energie în lucru mecanic
+                        util sau invers.</p>
+                    <p><strong>Mecanism:</strong> Un sistem de corpuri solide mobile (numite <strong>elemente
+                            cinematice</strong>) legate între ele prin <strong>cuple cinematice</strong>, având scopul
+                        de a transforma și transmite mișcarea și forțele.</p>
 
                     <h4>1.2. Element Cinematic</h4>
-                    <p>Modelează corpul solid din componența mecanismului, în mișcare relativă față de altul, cu contact direct și permanent. Caracterizat prin formă, dimensiuni, masă. Poate modela un singur corp solid sau mai multe corpuri solidare.</p>
-                    <p><strong>Clasa (rangul) elementului:</strong> Definită de numărul de cuple la care participă.</p>
-                    <p><strong>Reprezentări:</strong> Schemă constructivă, schemă cinematică, schemă structurală.</p>
-                    <p>Un corp rigid liber în plan are 3 grade de libertate, iar în spațiu are 6 grade de libertate.</p>
+                    <p>Reprezintă modelul unui corp solid dintr-un mecanism, care se mișcă relativ la alt corp cu care
+                        este în contact direct și permanent. Este caracterizat prin formă, dimensiuni și masă. Poate
+                        modela un singur corp sau un ansamblu de corpuri solidare (fără mișcare relativă între ele).</p>
+                    <ul>
+                        <li><strong>Clasa (rangul) elementului:</strong> Numărul de cuple la care participă.</li>
+                        <li><strong>Reprezentări:</strong>
+                            <ul>
+                                <li><strong>Schemă constructivă:</strong> Evidențiază forma geometrică și dimensiunile.
+                                </li>
+                                <li><strong>Schemă cinematică:</strong> Arată dimensiunile cinematice și poziția.</li>
+                                <li><strong>Schemă structurală:</strong> Indică cuplele la care participă elementul,
+                                    fără a considera dimensiunile sau poziția exactă.</li>
+                            </ul>
+                        </li>
+                        <li>Un corp rigid liber în plan are <strong>3 grade de libertate</strong> (2 translații, 1
+                            rotație).</li>
+                        <li>Un corp rigid liber în spațiu are <strong>6 grade de libertate</strong> (3 translații, 3
+                            rotații).</li>
+                    </ul>
 
                     <h4>1.3. Cuplă Cinematică</h4>
-                    <p>Legătura permanentă, directă și mobilă între două elemente cinematice. Limitează posibilitățile de mișcare (introduce restricții).</p>
-                    <p><strong>Clasificare (principalele criterii):</strong></p>
+                    <p>Este legătura permanentă, directă și mobilă între două elemente cinematice. Rolul său principal
+                        este de a limita posibilitățile de mișcare relativă, introducând restricții.</p>
+                    <p><strong>Clasificare principală:</strong></p>
                     <ul>
-                        <li><strong>După mobilitate (f) și restrictivitate (k):</strong> Clasa cuplei este dată de 'k'. ($f+k=6$ pentru spațiu).
+                        <li><strong>După mobilitate (f) și restrictivitate (k):</strong>
                             <ul>
-                                <li>Clasa I (k=5, f=1), Clasa II (k=4, f=2), ..., Clasa V (k=1, f=5).</li>
+                                <li>Mobilitatea (f): Numărul de mișcări relative independente permise.</li>
+                                <li>Restrictivitatea (k): Numărul de mișcări relative independente restricționate.</li>
+                                <li>Pentru cuple spațiale: $f + k = 6$.</li>
+                                <li>Clasa cuplei este dată de 'k'. Avem cuple de Clasa I (k=5, f=1) până la Clasa V
+                                    (k=1, f=5).</li>
                             </ul>
                         </li>
-                        <li><strong>După traiectoria relativă:</strong> Cuple spațiale (curbă în spațiu), Cuple plane (curbă în plan - ex: Rotație (R), Translație (T), Roto-translație plană (RT)).</li>
-                        <li><strong>După mărimea zonei de contact:</strong> Cuple superioare (contact punctiform sau liniar), Cuple inferioare (contact pe suprafață).</li>
-                        <li><strong>După menținerea contactului:</strong> Cuple închise (prin formă), Cuple deschise (prin forțe exterioare).</li>
+                        <li><strong>După traiectoria relativă:</strong>
+                            <ul>
+                                <li>Cuple spațiale (ex: sferică S, cilindrică C, elicoidală H).</li>
+                                <li>Cuple plane (mişcare în plane paralele, ex: rotație R, translație T, roto-translație
+                                    RT).</li>
+                            </ul>
+                        </li>
+                        <li><strong>După mărimea zonei de contact:</strong>
+                            <ul>
+                                <li><strong>Cuple superioare:</strong> Contact punctiform sau liniar (ex: camă-tachet,
+                                    roți dințate).</li>
+                                <li><strong>Cuple inferioare:</strong> Contact pe o suprafață (ex: articulație
+                                    cilindrică, prismatică).</li>
+                            </ul>
+                        </li>
+                        <li><strong>După modul de menținere a contactului:</strong>
+                            <ul>
+                                <li><strong>Cuple închise (prin formă):</strong> Contactul este asigurat de forma
+                                    geometrică a elementelor.</li>
+                                <li><strong>Cuple deschise (prin forțe):</strong> Contactul este menținut de forțe
+                                    exterioare (ex: greutate, arc).</li>
+                            </ul>
+                        </li>
                     </ul>
-                    <p>Exemple de cuple și simboluri convenționale sunt prezentate în materialele de curs.</p>
 
-                    <h4>1.4. Lanțuri Cinematice</h4>
-                    <p>Ansamblu de 'n' elemente cinematice legate prin 'c' cuple cinematice. Dacă ultimul element se leagă la primul, formează un contur ($c=n$).</p>
-                    <p><strong>Clasificare:</strong></p>
+                    <h4>1.4. Lanț Cinematic</h4>
+                    <p>Un ansamblu de 'n' elemente cinematice legate prin 'c' cuple cinematice. Dacă elementele formează
+                        o buclă închisă, se numește <strong>contur</strong> (unde $c=n$ pe un singur contur).</p>
                     <ul>
-                        <li><strong>După mișcările elementelor:</strong> Spațiale, Plane.</li>
-                        <li><strong>După clasa cuplelor:</strong> Generale, Uniformizate, Fundamentale (doar R și T).</li>
-                        <li><strong>După clasa elementelor și structură:</strong> Deschise, Închise, Simple, Complexe.</li>
+                        <li><strong>Grad de Libertate (L) al lanțului cinematic (spațial):</strong> Numărul de parametri
+                            independenți necesari pentru a defini poziția tuturor elementelor. Formula generală
+                            (Cebîșev-Grübler-Kutzbach):</li>
                     </ul>
-                    <p><strong>Grad de Libertate (L) al lanțului cinematic:</strong> $L = 6n - (5C_5 + 4C_4 + 3C_3 + 2C_2 + C_1)$ pentru spațiu.</p>
-                    <p><strong>Număr de Contururi Independente (N):</strong> $N = c - n + 1$.</p>
+                    <div class="formula">$$L = 6n - \sum_{j=1}^{5} (6-j)C_j = 6n - (5C_5 + 4C_4 + 3C_3 + 2C_2 + C_1)$$
+                    </div>
+                    <p>unde $C_j$ este numărul de cuple cu $j$ grade de libertate (sau clasa $6-j$ de restrictivitate).
+                    </p>
+                    <ul>
+                        <li><strong>Număr de Contururi Independente (N) într-un lanț cinematic:</strong></li>
+                    </ul>
+                    <div class="formula">$$N = c - n + 1$$</div>
 
-                    <h4>1.5. Mecanisme</h4>
-                    <p>Provine dintr-un lanț cinematic prin fixarea unui element (batiu/șasiu, notat '0'). Elementele mobile sunt 'm' ($m=n-1$). Se impune mișcare la cuple motoare (elemente conducătoare).</p>
-                    <p><strong>Grad de Mobilitate (M) al mecanismului:</strong> Numărul de parametri independenți pentru determinarea mișcărilor elementelor mobile față de batiu. $M = 6m - (5C_5 + 4C_4 + 3C_3 + 2C_2 + C_1)$ pentru spațiu.</p>
-                    <p>Pentru mecanisme plane (familia a treia, restrictivitate $\phi=3$): $M_3 = 3m - 2C_5 - C_4$. ($C_5$ aici reprezintă cuplele inferioare R sau T, iar $C_4$ cuplele superioare).</p>
-                    <p><strong>Număr de Contururi (N) în mecanism:</strong> $N = c - m$.</p>
+                    <h4>1.5. Mecanism</h4>
+                    <p>Un lanț cinematic în care un element este fixat și numit <strong>batiu</strong> (notat cu '0').
+                        Celelalte $m = n-1$ elemente sunt mobile.</p>
+                    <ul>
+                        <li><strong>Grad de Mobilitate (M) al mecanismului:</strong> Numărul de parametri independenți
+                            necesari pentru a defini poziția elementelor mobile față de batiu. Este și numărul de
+                            mișcări independente (motoare) ce pot fi aplicate.</li>
+                        <li><strong>Pentru mecanisme plane (familia $\varphi=3$):</strong> Elementele au 3 grade de
+                            libertate potențiale (2T, 1R). Cuplele de rotație (R) și translație (T) sunt de clasa a V-a
+                            (permit 1 grad de libertate, $f=1$, $k'=3-1=2$ restricții în plan). Cuplele superioare plane
+                            (ex: camă-tachet plan) sunt de clasa a IV-a (permit 2 grade de libertate, $f=2$, $k'=3-2=1$
+                            restricție în plan).</li>
+                    </ul>
+                    <div class="formula">$$M_3 = 3m - 2C_5 - 1C_4$$</div>
+                    <p>unde $C_5$ este numărul de cuple inferioare (R, T), iar $C_4$ este numărul de cuple superioare
+                        plane.</p>
+                    <ul>
+                        <li><strong>Număr de Contururi Independente (N) într-un mecanism:</strong></li>
+                    </ul>
+                    <div class="formula">$$N = c - m$$</div>
                 </div>
 
                 <div class="course-section">
-                    <h3 class="text-2xl font-semibold">2. Analiza Structurală a Mecanismelor Plane</h3>
-                    <h4>2.1. Gradul de Mobilitate (Formula lui Cebîșev/Grübler)</h4>
-                    <p>Pentru mecanisme plane: $M = 3m - 2i - s$, unde $m$ = nr. elemente mobile, $i$ = nr. cuple inferioare (R, T), $s$ = nr. cuple superioare. (Notă: $i$ este echivalent cu $C_5$ și $s$ cu $C_4$ din formula generalizată pentru mecanisme plane).</p>
-                    
-                    <h4>2.2. Numărul Contururilor Independente</h4>
-                    <p>$N = \Sigma c - m = (i+s) - m$. Furnizează numărul ecuațiilor vectoriale independente.</p>
+                    <h3 class="text-2xl font-semibold">Curs 2: Analiza Structurală (Partea I): Grad de Mobilitate, Nr.
+                        Contururi, Echivalarea Cuplelor</h3>
+                    <h4>2.1. Gradul de Mobilitate (M) pentru Mecanisme Plane</h4>
+                    <p>Gradul de mobilitate (M) al unui mecanism reprezintă numărul de parametri independenți necesari
+                        pentru a determina complet poziția tuturor elementelor mobile față de elementul fix (batiu).
+                        Acesta indică și numărul de elemente conducătoare (motoare) necesare pentru o mișcare
+                        determinată a mecanismului.</p>
+                    <p>Pentru mecanismele plane, formula generală (Cebîșev-Grübler) este:</p>
+                    <div class="formula">$$M = 3(n-1) - 2C_5 - 1C_4$$</div>
+                    <p>Sau, notând $m = n-1$ (numărul de elemente mobile):</p>
+                    <div class="formula">$$M = 3m - 2i - s$$</div>
+                    <p>Unde:</p>
+                    <ul>
+                        <li>$m$: numărul de elemente mobile ale mecanismului.</li>
+                        <li>$n$: numărul total de elemente (inclusiv batiul).</li>
+                        <li>$i$ (sau $C_5$): numărul de cuple inferioare (de clasă a V-a, cu 1 grad de libertate, ex:
+                            rotație R, translație T). Acestea introduc $3-1=2$ restricții în plan.</li>
+                        <li>$s$ (sau $C_4$): numărul de cuple superioare (de clasă a IV-a, cu 2 grade de libertate, ex:
+                            contact camă-tachet plan). Acestea introduc $3-2=1$ restricție în plan.</li>
+                    </ul>
+
+                    <h4>2.2. Numărul Contururilor Independente (N)</h4>
+                    <p>Numărul de contururi independente (N) într-un mecanism este important pentru analiza cinematică
+                        și dinamică, deoarece indică numărul de ecuații vectoriale independente ce pot fi scrise pentru
+                        închiderea lanțurilor cinematice.</p>
+                    <p>Pentru un mecanism (cu $m$ elemente mobile și $c$ cuple totale):</p>
+                    <div class="formula">$$N = c - m$$</div>
+                    <p>Dacă $c = i+s$ (totalul cuplelor inferioare și superioare):</p>
+                    <div class="formula">$$N = (i+s) - m$$</div>
 
                     <h4>2.3. Echivalarea Cuplelor Superioare</h4>
-                    <p>O cuplă superioară (plană, $s=1$) poate fi înlocuită cu 1 element cinematic binar ($n'=1$) și 2 cuple cinematice inferioare ($i'=2$) pentru a obține un lanț cinematic fundamental echivalent, fără a modifica gradul de libertate.</p>
+                    <p>Pentru simplificarea analizei structurale, în special la aplicarea metodei grupelor Assur,
+                        cuplele superioare (s) pot fi înlocuite cu un lanț cinematic echivalent format din elemente
+                        suplimentare ($n'$) și cuple inferioare ($i'$).</p>
+                    <p>Un <strong>lanț cinematic fundamental plan</strong> conține doar cuple inferioare (R și T).</p>
+                    <p>Condiția de echivalență este ca gradul de libertate al lanțului original să fie egal cu cel al
+                        lanțului echivalent:</p>
+                    <p>$L_{original} = 3n - 2i - s$</p>
+                    <p>$L_{echivalent} = 3(n+n') - 2(i+i')$</p>
+                    <p>Egalând $L_{original} = L_{echivalent}$, se obține relația generală: $3n' - 2i' = -s$.</p>
+                    <p>În practică, se consideră cea mai simplă echivalență:</p>
+                    <p><strong>O cuplă superioară (s=1) poate fi înlocuită cu un element cinematic binar suplimentar
+                            ($n'=1$) și două cuple cinematice inferioare ($i'=2$).</strong></p>
+                    <p>Verificare: $3(1) - 2(2) = 3 - 4 = -1$. Deci, $1s \equiv 1n' + 2i'$.</p>
+                    <p>Această echivalare transformă un mecanism cu cuple superioare într-un mecanism fundamental,
+                        facilitând analiza structurală prin descompunerea în grupe Assur.</p>
+                    <p>Exemple de echivalare:</p>
+                    <ul>
+                        <li>Contactul dintre două profile curbe (camă-tachet) se înlocuiește cu o bielă (element binar)
+                            articulată la centrele de curbură ale profilelor în punctul de contact.</li>
+                    </ul>
+                </div>
 
-                    <h4>2.4. Etapele Analizei Structurale</h4>
-                    <ol class="list-decimal ml-6">
-                        <li>Realizarea schemei cinematice (reprezentare la scară).</li>
-                        <li>Elaborarea modelului structural (reprezentare simbolică, independentă de poziție și dimensiuni, cuple superioare echivalate).</li>
-                        <li>Identificarea lanțului cinematic și a grupelor structurale.</li>
-                        <li>Elaborarea schemei de conexiuni (pune în evidență etapele de calcul cinematic și cinetostatic).</li>
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 3: Analiza Structurală (Partea II): Etape, Grupe
+                        Structurale, Exemplu</h3>
+                    <h4>3.1. Etapele Analizei Structurale a Mecanismelor Plane</h4>
+                    <p>Analiza structurală are ca scop înțelegerea modului în care este construit un mecanism și cum se
+                        transmit mișcările. Etapele principale sunt:</p>
+                    <ol>
+                        <li><strong>Realizarea schemei cinematice:</strong> Reprezentarea la scară a mecanismului,
+                            specificând caracteristicile elementelor și cuplelor. Depinde de poziția mecanismului.</li>
+                        <li><strong>Construirea modelului structural (schema structurală):</strong> O reprezentare
+                            simbolică, independentă de poziție și dimensiuni. Elementele sunt reprezentate după clasa
+                            lor, cuplele de translație similar celor de rotație, iar cuplele superioare sunt echivalate.
+                        </li>
+                        <li><strong>Identificarea grupelor structurale (Assur):</strong> Descompunerea mecanismului în
+                            elementul conducător (sau grupa conducătoare activă) și lanțuri cinematice simple numite
+                            grupe Assur (grupe modulare pasive).</li>
+                        <li><strong>Elaborarea schemei de conexiuni:</strong> Arată ordinea de asamblare a grupelor
+                            structurale, de la elementul conducător la elementele finale. Este utilă pentru calculul
+                            cinematic (parcurgere directă) și cinetostatic (parcurgere inversă).</li>
                     </ol>
 
-                    <h4>2.5. Grupe Structurale (Assur)</h4>
-                    <p>Lanțuri cinematice cu grad de mobilitate specific, folosite la formarea mecanismelor.</p>
+                    <h4>3.2. Grupe Structurale (Assur)</h4>
+                    <p>Grupele structurale sunt lanțuri cinematice cu un anumit grad de mobilitate, folosite pentru a
+                        construi mecanisme complexe pornind de la un element conducător.</p>
                     <ul>
-                        <li><strong>Grupe Modulare Active (GMA):</strong> Au $M>0$. Ex: element conducător legat la batiu ($M=1$).</li>
-                        <li><strong>Grupe Modulare Pasive (GMP):</strong> Au $M=0$. Pot fi adăugate/scoase fără a modifica $M$ al mecanismului.
-                            <ul>
-                                <li><strong>Diadă (Clasa II, Ordin 2):</strong> 2 elemente, 3 cuple (2 exterioare). Aspecte: RRR, RRT, RTR, TRT, RTT.</li>
-                                <li><strong>Triadă (Clasa III, Ordin 3):</strong> 4 elemente, 6 cuple (3 exterioare).</li>
-                                <li><strong>Tetradă (Clasa IV, Ordin 2):</strong> 4 elemente, 5 cuple (2 exterioare).</li>
-                            </ul>
-                        </li>
-                        <li>Caracteristici GMP: Clasă (rangul max. al unui element), Ordin (nr. cuple exterioare), Aspect (nr., tip, poziție cuple).</li>
+                        <li><strong>Grupe Modulare Active (GMA):</strong> Au grad de mobilitate $M  0$. Cel mai simplu
+                            GMA este elementul conducător legat la batiu (ex: o manivelă), având $M=1$.</li>
+                        <li><strong>Grupe Modulare Pasive (GMP) sau Grupe Assur:</strong> Au grad de mobilitate $M = 0$
+                            atunci când sunt considerate independent. Atașate la un mecanism existent (cu $M \ge 1$) sau
+                            la batiu prin cuplele lor exterioare ("de legătură"), ele nu modifică gradul de mobilitate
+                            al mecanismului inițial.</li>
                     </ul>
-                    <p>Un mecanism cu $M=1$ poate fi format dintr-o GMA și una sau mai multe GMP.</p>
-                </div>
-                
-                <div class="course-section">
-                    <h3 class="text-2xl font-semibold">3. Analiza Cinematică a Mecanismelor</h3>
-                    <p>Studiază mișcarea punctelor și elementelor cinematice, determinând poziții, viteze și accelerații, fără a considera forțele.</p>
-                    <p><strong>Date necesare:</strong> Poziții axe fixe, dimensiuni elemente, poziție și lege de mișcare element conducător.</p>
-                    <p><strong>Metode:</strong> Intersecțiilor, șabloanelor, locurilor geometrice, analitică.</p>
-
-                    <h4>3.1. Analiza Cinematică a Mecanismului Patrulater Articulat (R-RRR)</h4>
-                    <p><strong>Elemente:</strong> Manivelă (1), Bielă (2), Balansier (3), Batiu (0). Cuple de rotație.</p>
-                    <p><strong>Date cunoscute:</strong> Lungimi $l_1, l_2, l_3, l_0$ (distanța $A_0B_0$), $\varphi_1$, $\omega_1$ (constantă).</p>
-                    <p><strong>De determinat:</strong> $\varphi_2, \varphi_3$ (poziții), $\omega_2, \omega_3$ (viteze unghiulare), $\epsilon_2, \epsilon_3$ (accelerații unghiulare).</p>
-                    <p><strong>Ecuații de poziție (proiecții vectoriale):</strong></p>
-                    <p>$l_1 \cos\varphi_1 + l_2 \cos\varphi_2 = l_0 + l_3 \cos\varphi_3$</p>
-                    <p>$l_1 \sin\varphi_1 + l_2 \sin\varphi_2 = l_3 \sin\varphi_3$</p>
-                    <p>Se rezolvă pentru $\varphi_2$ și apoi $\varphi_3$.</p>
-                    <p><strong>Viteze unghiulare (prin derivarea ec. de poziție):</strong></p>
-                    <p>$\omega_2 = \frac{l_1 \sin(\varphi_3-\varphi_1)}{l_2 \sin(\varphi_2-\varphi_3)}\omega_1$</p>
-                    <p>$\omega_3 = \frac{l_1 \sin(\varphi_1-\varphi_2)}{l_3 \sin(\varphi_3-\varphi_2)}\omega_1$</p>
-                    <p><strong>Accelerații unghiulare (prin derivarea ec. de viteze):</strong> Se obțin expresii similare.</p>
-
-                    <h4>3.2. Analiza Cinematică a Mecanismului Manivelă-Piston (R-RRT)</h4>
-                    <p><strong>Elemente:</strong> Manivelă (1), Bielă (2), Piston (3). Cuple R, R, T.</p>
-                    <p><strong>Date cunoscute:</strong> $l_1, l_2$, poziția $A_0$, direcția deplasare piston, $\varphi_1$, $\omega_1$ (constantă).</p>
-                    <p><strong>De determinat:</strong> $\varphi_2, \omega_2, \epsilon_2$ (bielă), $s, v, a$ (piston).</p>
-                    <p><strong>Ecuații de poziție:</strong></p>
-                    <p>$l_1 \cos\varphi_1 + l_2 \cos\varphi_2 = s$</p>
-                    <p>$l_1 \sin\varphi_1 + l_2 \sin\varphi_2 = 0 \Rightarrow \sin\varphi_2 = -\frac{l_1 \sin\varphi_1}{l_2}$ (se află $\varphi_2$, apoi $s$)</p>
-                    <p><strong>Viteze (prin derivare):</strong></p>
-                    <p>$-l_1\omega_1\sin\varphi_1 - l_2\omega_2\sin\varphi_2 = v$</p>
-                    <p>$l_1\omega_1\cos\varphi_1 + l_2\omega_2\cos\varphi_2 = 0$ (se află $\omega_2$, apoi $v$)</p>
-                    <p><strong>Accelerații (prin derivare):</strong> Se obțin $\epsilon_2$ și $a$.</p>
-                </div>
-
-                <div class="course-section">
-                    <h3 class="text-2xl font-semibold">4. Echilibrarea Mecanismelor</h3>
-                    <p>Ansamblu de măsuri pentru anularea/diminuarea efectului forțelor de inerție, reducând consumul de energie, vibrațiile și uzura.</p>
-                    <p><strong>Echilibrare Statică:</strong> Condiția este ca centrul de masă al sistemului să fie într-un punct fix.</p>
-                    <p><strong>Metoda Concentrării Maselor:</strong> Masa 'm' a unui element AB cu centrul de greutate G la distanța 's' de A poate fi repartizată în A și B:</p>
-                    <p>$m_A = m \frac{l-s}{l}$, $m_B = m \frac{s}{l}$ (unde $l$ este lungimea AB)</p>
-                    
-                    <h4>4.1. Echilibrarea Statică a Mecanismului Patrulater Articulat</h4>
-                    <p>Se repartizează masele elementelor 1, 2, 3 în cuplele $A_0, A, B, B_0$. Apoi se adaugă contragreutăți.</p>
-                    <p><strong>Varianta 1: Contragreutăți pe manivelă ($m_I$) și balansier ($m_{II}$).</strong></p>
+                    <p>O grupă Assur este caracterizată prin:</p>
                     <ul>
-                        <li>$m_I \cdot r_I = m_A \cdot l_1$ (masa $m_A$ este suma maselor concentrate în A din elementele 1 și 2)</li>
-                        <li>$m_{II} \cdot r_{II} = m_B \cdot l_3$ (masa $m_B$ este suma maselor concentrate în B din elementele 2 și 3)</li>
-                        <li>$r_I, r_{II}$ sunt distanțele contragreutăților față de $A_0$, respectiv $B_0$.</li>
+                        <li><strong>Clasa grupei:</strong> Rangul maxim al unui element cinematic din grupă (nr. maxim
+                            de cuple ce mărginesc un contur).</li>
+                        <li><strong>Ordinul grupei:</strong> Numărul de cuple exterioare (de legătură) cu care grupa se
+                            leagă la restul mecanismului.</li>
+                        <li><strong>Aspectul grupei:</strong> Tipul și aranjamentul cuplelor și elementelor din grupă.
+                        </li>
                     </ul>
-                    <p>Scopul este ca centrul de masă al ansamblului (manivelă + $m_A$ + $m_I$) să fie în $A_0$, și similar pentru balansier în $B_0$. Masa totală a mecanismului echilibrat se va regăsi în $A_0$ și $B_0$. Poziția finală a centrului de greutate G al întregului mecanism se calculează pe segmentul $A_0B_0$. Alte variante implică plasarea contragreutăților pe bielă și manivelă, sau pe bielă și balansier.</p>
-                </div>
-
-                <div class="course-section">
-                    <h3 class="text-2xl font-semibold">5. Mecanisme cu Came și Tacheți</h3>
-                    <p>Mecanisme cu cuple superioare ($C_4$), unde cama (element conducător profilat) imprimă tachetului (element condus) o mișcare precisă, determinată de profilul camei.</p>
-                    <p><strong>Aplicații:</strong> Motoare (control supape), mașini-unelte, automate de producție, industria textilă, ceasornicărie.</p>
-                    <p><strong>Structura mecanismului simplu ($M=1, N=1$):</strong> $m=2$ elemente mobile, $C_5=2$ cuple inferioare, $C_4=1$ cuplă superioară.</p>
-                    <p><strong>Menținerea contactului camă-tachet:</strong> Prin formă (canal în camă) sau prin forță (resort, sistem pneumatic/hidraulic).</p>
-
-                    <h4>5.1. Clasificarea Mecanismelor cu Came</h4>
+                    <h5>Principalele Grupe Assur:</h5>
+                    <p><strong>a) Diada (Clasa II, Ordin 2):</strong> Cea mai simplă grupă Assur.</p>
                     <ul>
-                        <li><strong>După caracteristicile tachetului:</strong>
+                        <li>Formată din 2 elemente binare și 3 cuple (una interioară, două exterioare).</li>
+                        <li>$m=2, i=3 \Rightarrow M = 3(2) - 2(3) = 0$.</li>
+                        <li>Aspecte comune (cuplele exterioare și interioară pot fi R sau T):
                             <ul>
-                                <li>Forma suprafeței de contact: cu vârf, cu rolă, cu disc plan, cu disc curb.</li>
-                                <li>Mișcarea tachetului: translație, rotație (oscilant), plan-paralelă.</li>
-                            </ul>
-                        </li>
-                        <li><strong>După caracteristicile camei:</strong>
-                            <ul>
-                                <li>Forma curbei profilului: camă plană, camă spațială.</li>
-                                <li>Dispunerea profilului: exterioară, interioară.</li>
-                                <li>Mișcarea camei: translație, rotație.</li>
-                                <li>Forma profilului (legea de mișcare): liniar, sinusoidal, parabolic etc.</li>
-                            </ul>
-                        </li>
-                        <li><strong>După ansamblul camă-tachet:</strong>
-                            <ul>
-                                <li>Tip mișcare: R-T, R-R, T-T, T-R.</li>
-                                <li>Direcția deplasării tachetului: central (axial), dezaxat (excentric).</li>
+                                <li><strong>RRR:</strong> Toate cuplele sunt de rotație.</li>
+                                <li><strong>RRT:</strong> Două cuple de rotație, una de translație (la legătura
+                                    exterioară).</li>
+                                <li><strong>RTR:</strong> Cupla interioară de translație.</li>
                             </ul>
                         </li>
                     </ul>
-                    
-                    <h4>5.2. Profile și Elemente Geometrice (Camă de Rotație, Tachet de Translație)</h4>
-                    <p><strong>Profilul camei:</strong></p>
+                    <p><strong>b) Triada (Clasa III, Ordin 3):</strong></p>
                     <ul>
-                        <li>Profil de bază (cerc de bază, rază minimă $r_0$).</li>
-                        <li>Profil de vârf (cerc de vârf, rază maximă).</li>
-                        <li>Profil de urcare.</li>
-                        <li>Profil de coborâre.</li>
+                        <li>Formată dintr-un element ternar și trei elemente binare, sau alte combinații. Ex: 4
+                            elemente, 6 cuple.</li>
+                        <li>$m=4, i=6 \Rightarrow M = 3(4) - 2(6) = 0$.</li>
                     </ul>
-                    <p><strong>Unghiuri de fază (rotația camei $\varphi$):</strong></p>
+                    <p><strong>c) Tetradă (Clasa IV, Ordin 2 sau alte ordine):</strong></p>
                     <ul>
-                        <li>$\varphi_U$: unghi de urcare.</li>
-                        <li>$\varphi_{SS}$: unghi de staționare superioară.</li>
-                        <li>$\varphi_C$: unghi de coborâre.</li>
-                        <li>$\varphi_{SI}$: unghi de staționare inferioară.</li>
-                        <li>$\varphi_U + \varphi_{SS} + \varphi_C + \varphi_{SI} = 360^\circ$.</li>
-                    </ul>
-                    <p><strong>Alte elemente:</strong></p>
-                    <ul>
-                        <li>Excentricitatea (e): distanța de la centrul de rotație al camei la direcția de translație a tachetului (pentru tacheți dezaxați).</li>
-                        <li>Deplasarea inițială a tachetului ($s_0$): poziția tachetului pe cercul de bază. $s_0^2 + e^2 = r_0^2$ (pentru tachet cu vârf dezaxat).</li>
-                        <li>Deplasarea tachetului (s): funcție de $\varphi$.</li>
-                        <li>Cursa tachetului (h): deplasarea maximă a tachetului ($h = s_{max} - s_{min}$).</li>
+                        <li>Grupe mai complexe, de clasă superioară.</li>
                     </ul>
 
-                    <h4>5.3. Avantaje și Dezavantaje</h4>
-                    <p><strong>Avantaje:</strong> Control precis al mișcării, versatilitate, fiabilitate, eficiență bună.</p>
-                    <p><strong>Dezavantaje:</strong> Uzură și frecare, proiectare complexă, necesită întreținere, limitări la viteze mari ("săritura" tachetului).</p>
+                    <h4>3.3. Exemplu de Analiză Structurală a unui Mecanism Plan</h4>
+                    <p>Se consideră un mecanism plan (ex: cel din CURS_2-3_2025.pdf, pag. 16-19).</p>
+                    <ol>
+                        <li><strong>Schema cinematică:</strong> Se desenează mecanismul.</li>
+                        <li><strong>Elemente și cuple:</strong>
+                            <ul>
+                                <li>$m = 5$ elemente mobile (1, 2, 3, 4, 5) și batiul 0.</li>
+                                <li>$i = 7$ cuple inferioare (O, A, B, C, D, E - rotație; F - translație). $s=0$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Grad de mobilitate:</strong> $M = 3m - 2i - s = 3(5) - 2(7) - 0 = 15 - 14 = 1$.
+                            Mecanismul are 1 grad de mobilitate.</li>
+                        <li><strong>Număr contururi independente:</strong> $N = (i+s) - m = (7+0) - 5 = 2$.</li>
+                        <li><strong>Tabelul cuplelor și elementelor:</strong> Se identifică tipul fiecărei cuple și
+                            elementele pe care le leagă; se identifică clasa fiecărui element (binar, ternar).</li>
+                        <li><strong>Modelul structural:</strong> Se reprezintă elementele prin segmente și cuplele prin
+                            cercuri.</li>
+                        <li><strong>Identificarea grupelor Assur și schema de conexiuni:</strong>
+                            <ul>
+                                <li>Elementul conducător (GMA): (0,1) - manivela 1.</li>
+                                <li>Prima grupă Assur (diadă RRR): elementele 2 și 3, cuplele A, B, C. Se leagă la
+                                    GMA(0,1) prin cupla A și la batiu prin cupla C.</li>
+                                <li>A doua grupă Assur (diadă RRT): elementele 4 și 5, cuplele D, E, F. Se leagă la
+                                    diada (2,3) prin cupla D și la batiu prin cupla F.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relația structurală (formula de structură):</strong> Descrie modul de asamblare. Ex:
+                            $Mecanism = GMA(0,1) \leftarrow Diada(2,3) \leftarrow Diada(4,5)$.</li>
+                    </ol>
                 </div>
 
                 <div class="course-section">
-                    <h3 class="text-2xl font-semibold">6. Mecanisme cu Roți Dințate și Angrenaje</h3>
-                    <h4>6.1. Roți Dințate - Noțiuni Introductive</h4>
-                    <p>Organe de mașini cu dantură, utilizate pentru transmiterea mișcării de rotație și a momentului de torsiune prin contact direct, cu raport de transmitere constant sau variabil.</p>
-                    <p><strong>Părți componente:</strong> Coroana (cu dantura), butucul (fixare pe arbore), discul/spițele (legătura).</p>
-                    <p><strong>Clasificare:</strong></p>
+                    <h3 class="text-2xl font-semibold">Curs 4: Analiza Cinematică a Mecanismelor</h3>
+                    <p>Analiza cinematică studiază mișcarea elementelor unui mecanism (poziții, viteze, accelerații)
+                        fără a lua în considerare forțele care produc această mișcare. Presupune că structura și
+                        dimensiunile mecanismului, precum și legea de mișcare a elementului/elementelor conducătoare
+                        sunt cunoscute.</p>
+                    <h4>4.1. Noțiuni Introductive</h4>
                     <ul>
-                        <li>După forma suprafeței de rostogolire: cilindrice (și cremaliere), conice, hiperboloidale, melci și roți melcate.</li>
-                        <li>După forma și direcția flancului dinților: dantură dreaptă, înclinată, curbă.</li>
-                        <li>După poziția danturii: exterioară, interioară.</li>
+                        <li><strong>Parametri cinematici:</strong> Poziții (liniare și unghiulare), viteze (liniare și
+                            unghiulare), accelerații (liniare și unghiulare).</li>
+                        <li><strong>Date de intrare necesare:</strong>
+                            <ul>
+                                <li>Schema cinematică și dimensiunile elementelor.</li>
+                                <li>Pozițiile cuplelor fixe (batiu).</li>
+                                <li>Legea de mișcare a elementului conducător (ex: $\varphi_1(t)$, $\omega_1(t)$,
+                                    $\varepsilon_1(t)$).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Metode de analiză cinematică:</strong>
+                            <ul>
+                                <li><strong>Grafice:</strong> Intuitive, utile în proiectare (ex: metoda planurilor de
+                                    viteze/accelerații, metoda rotațiilor).</li>
+                                <li><strong>Analitice:</strong> Precise, generale, potrivite pentru calcul automat (ex:
+                                    metoda vectorială/complexă, metoda contururilor independente).</li>
+                                <li><strong>Grafo-analitice:</strong> Combină avantajele ambelor metode.</li>
+                            </ul>
+                        </li>
                     </ul>
 
-                    <h4>6.2. Angrenaje cu Roți Dințate</h4>
-                    <p>Mecanism elementar format din două roți dințate mobile în jurul axelor, cu poziție relativă invariabilă, unde o roată o antrenează pe cealaltă.</p>
-                    <p><strong>Clasificare:</strong></p>
+                    <h4>4.2. Analiza Cinematică a Mecanismului Patrulater Articulat (R-RRR)</h4>
+                    <p>Este un mecanism fundamental format din 4 bare articulate (3 mobile, 1 fixă - batiul), cu toate
+                        cuplele de rotație.</p>
                     <ul>
-                        <li>După poziția relativă a axelor: axe paralele, axe concurente, axe încrucișate.</li>
-                        <li>După tipul angrenării: exterioare, interioare.</li>
-                        <li>După forma roților: cilindrice, conice, hiperboloidale (elicoidale, melcate, hipoide).</li>
-                        <li>După direcția dinților: dantură dreaptă, înclinată, curbă, în V.</li>
-                        <li>După forma profilului dinților: evolventic, cicloidal, în arc de cerc.</li>
+                        <li><strong>Date cunoscute:</strong> Lungimile laturilor ($l_0, l_1, l_2, l_3$), poziția
+                            batiului, $\varphi_1(t), \omega_1(t), \varepsilon_1(t)$.</li>
+                        <li><strong>Necunoscute:</strong> $\varphi_2, \varphi_3, \omega_2, \omega_3, \varepsilon_2,
+                            \varepsilon_3$.</li>
                     </ul>
-                    <p><strong>Raport de transmitere ($i_{12}$):</strong> $i_{12} = \frac{\omega_1}{\omega_2} = \pm \frac{z_2}{z_1}$ (semnul '-' pentru angrenare exterioară, '+' pentru interioară; $z$ = număr de dinți).</p>
-                    <p><strong>Avantaje:</strong> Eficiență ridicată, precizie, durabilitate, compactitate.</p>
-                    <p><strong>Dezavantaje:</strong> Costuri fabricație, complexitate proiectare, zgomot (dantură dreaptă), necesită lubrifiere.</p>
+                    <h5>Ecuații de poziție (metoda vectorială):</h5>
+                    <p>Se scrie ecuația vectorială de închidere a conturului: $\vec{l_1} + \vec{l_2} = \vec{l_0} +
+                        \vec{l_3}$.</p>
+                    <p>Proiectând pe axele Ox și Oy:</p>
+                    <div class="formula">$$l_1 \cos\varphi_1 + l_2 \cos\varphi_2 = l_0 + l_3 \cos\varphi_3$$</div>
+                    <div class="formula">$$l_1 \sin\varphi_1 + l_2 \sin\varphi_2 = l_3 \sin\varphi_3$$</div>
+                    <p>Acest sistem se rezolvă pentru $\varphi_2$ și $\varphi_3$ (de obicei rezultă două soluții
+                        posibile pentru configurația mecanismului).</p>
+                    <h5>Ecuații de viteze:</h5>
+                    <p>Se derivează ecuațiile de poziție în raport cu timpul ($d\varphi/dt = \omega$):</p>
+                    <div class="formula">$$-l_1 \omega_1 \sin\varphi_1 - l_2 \omega_2 \sin\varphi_2 = -l_3 \omega_3
+                        \sin\varphi_3$$</div>
+                    <div class="formula">$$l_1 \omega_1 \cos\varphi_1 + l_2 \omega_2 \cos\varphi_2 = l_3 \omega_3
+                        \cos\varphi_3$$</div>
+                    <p>Se rezolvă pentru $\omega_2$ și $\omega_3$.</p>
+                    <h5>Ecuații de accelerații:</h5>
+                    <p>Se derivează ecuațiile de viteze în raport cu timpul ($d\omega/dt = \varepsilon$):</p>
+                    <div class="formula">$$-l_1(\varepsilon_1 \sin\varphi_1 + \omega_1^2 \cos\varphi_1) -
+                        l_2(\varepsilon_2 \sin\varphi_2 + \omega_2^2 \cos\varphi_2) = -l_3(\varepsilon_3 \sin\varphi_3 +
+                        \omega_3^2 \cos\varphi_3)$$</div>
+                    <div class="formula">$$l_1(\varepsilon_1 \cos\varphi_1 - \omega_1^2 \sin\varphi_1) +
+                        l_2(\varepsilon_2 \cos\varphi_2 - \omega_2^2 \sin\varphi_2) = l_3(\varepsilon_3 \cos\varphi_3 -
+                        \omega_3^2 \sin\varphi_3)$$</div>
+                    <p>Se rezolvă pentru $\varepsilon_2$ și $\varepsilon_3$ (considerând $\varepsilon_1$ cunoscut,
+                        adesea $\varepsilon_1=0$ dacă $\omega_1=const.$).</p>
 
-                    <h4>6.3. Elemente Geometrice ale Danturii (Cilindrice, Dantură Dreaptă)</h4>
+                    <h4>4.3. Analiza Cinematică a Mecanismului Manivelă-Piston (R-RRT)</h4>
+                    <p>Transformă mișcarea de rotație a manivelei în mișcare de translație a pistonului.</p>
                     <ul>
-                        <li><strong>Cercuri:</strong> de cap ($d_a$), de divizare ($d$), de picior ($d_f$), de bază ($d_b = d \cos\alpha$).</li>
-                        <li><strong>Înălțimi:</strong> capului ($h_a = m$), piciorului ($h_f = 1.25m$), dintelui ($h = h_a + h_f$).</li>
-                        <li><strong>Pasul circular (p):</strong> $p = m \cdot \pi$.</li>
-                        <li><strong>Modulul (m):</strong> $m = d/z = p/\pi$. Parametru fundamental, standardizat.</li>
-                        <li><strong>Grosimea dintelui ($s_d$) și lățimea golului ($e_d$) pe cercul de divizare:</strong> $s_d = e_d = p/2$.</li>
-                        <li><strong>Unghiul de presiune de divizare ($\alpha$):</strong> Standard $20^\circ$.</li>
+                        <li><strong>Date cunoscute:</strong> Lungimile $l_1$ (manivelă), $l_2$ (bielă), $\varphi_1(t),
+                            \omega_1(t), \varepsilon_1(t)$.</li>
+                        <li><strong>Necunoscute:</strong> Poziția pistonului $s$, $\varphi_2$ (unghiul bielei), $v$
+                            (viteza pistonului), $\omega_2$, $a$ (accelerația pistonului), $\varepsilon_2$.</li>
                     </ul>
-
-                    <h4>6.4. Mecanisme Planetare (Angrenaje cu Axe Mobile)</h4>
-                    <p>Formate din roți centrale (solare, axe fixe), roți satelit (axe mobile, se rotesc în jurul axei proprii și a axei roților centrale) și braț port-satelit.</p>
-                    <p>Pot fi planetare propriu-zise (o roată centrală fixă, $M=1$) sau diferențiale (roată centrală mobilă, $M=2$).</p>
-                    <p><strong>Metoda lui Willis pentru analiza cinematică:</strong> Se imprimă întregului sistem o mișcare de rotație cu turația brațului port-satelit ($n_s$), dar în sens invers ($-n_s$). Brațul devine fix, iar turațiile relative ale roților 1 și 2 față de braț sunt $n_1^s = n_1 - n_s$ și $n_2^s = n_2 - n_s$.</p>
-                    <p>Raportul de transmitere în sistemul "fixat": $\frac{n_1^s}{n_2^s} = \frac{n_1 - n_s}{n_2 - n_s} = \pm \frac{z_2}{z_1}$.</p>
-
-                    <h4>6.5. Evolventa</h4>
-                    <p>Curbă plană obținută prin rostogolirea unei drepte generatoare, fără alunecare, pe un cerc de bază fix. Este profilul cel mai utilizat pentru dinții roților dințate deoarece asigură un raport de transmitere constant.</p>
-                    <p><strong>Proprietăți:</strong> Normalele la evolventă sunt tangente la cercul de bază; linia de angrenare este dreaptă.</p>
-                    <p>Ecuații parametrice (polare): $\rho = r_b / \cos\alpha$, $\varphi = \text{tg}\alpha - \alpha = \text{inv}\alpha$ (involuta lui $\alpha$).</p>
-
-                    <h4>6.6. Legea Fundamentală a Angrenării</h4>
-                    <p>Pentru ca raportul de transmitere să fie constant, normala comună la profilele dinților în punctul de contact trebuie să treacă mereu printr-un punct fix, numit polul angrenării (C), situat pe linia centrelor $O_1O_2$.</p>
-                    <p>$i_{12} = \frac{\omega_1}{\omega_2} = \frac{O_2C}{O_1C} = \text{constant}$.</p>
-
-                    <h4>6.7. Linia de Angrenare</h4>
-                    <p>Locul geometric al punctelor de contact dintre dinții celor două roți. Pentru profile evolventice, este o dreaptă tangentă interioară la cele două cercuri de bază.</p>
-                    <p>Segmentul de angrenare (IE) este porțiunea efectivă de contact pe linia de angrenare.</p>
-
-                    <h4>6.8. Gradul de Acoperire ($\epsilon$)</h4>
-                    <p>Raportul dintre lungimea segmentului de angrenare ($g$) proiectat pe cercul de divizare (sau arcul de angrenare) și pasul circular ($p$) pe cercul de divizare. $\epsilon = \frac{g_a}{p}$ (unde $g_a$ e arcul de angrenare). Sau, mai precis, raportul dintre lungimea activă a liniei de angrenare și pasul de bază ($p_b = p \cos\alpha$).</p>
-                    <p>Reprezintă numărul mediu de perechi de dinți aflați simultan în contact. Pentru funcționare continuă, $\epsilon > 1$ (uzual $1.2 \ldots 1.8$).</p>
+                    <h5>Ecuații de poziție:</h5>
+                    <div class="formula">$$l_1 \cos\varphi_1 + l_2 \cos\varphi_2 = s$$</div>
+                    <div class="formula">$$l_1 \sin\varphi_1 - l_2 \sin\varphi_2 = e \quad \text{(e = excentricitatea,
+                        adesea e=0 pentru piston centrat)}$$</div>
+                    <p>Se rezolvă pentru $s$ și $\varphi_2$. Pentru $e=0$: $\sin\varphi_2 = (l_1/l_2)\sin\varphi_1$.</p>
+                    <h5>Ecuații de viteze (pentru $e=0$):</h5>
+                    <div class="formula">$$-l_1 \omega_1 \sin\varphi_1 - l_2 \omega_2 \sin\varphi_2 = v$$</div>
+                    <div class="formula">$$l_1 \omega_1 \cos\varphi_1 - l_2 \omega_2 \cos\varphi_2 = 0 \Rightarrow
+                        \omega_2 = \omega_1 \frac{l_1 \cos\varphi_1}{l_2 \cos\varphi_2}$$</div>
+                    <p>Se rezolvă pentru $v$ și $\omega_2$.</p>
+                    <h5>Ecuații de accelerații (pentru $e=0$ și $\omega_1=const.$):</h5>
+                    <div class="formula">$$-l_1 \omega_1^2 \cos\varphi_1 - l_2 \varepsilon_2 \sin\varphi_2 - l_2
+                        \omega_2^2 \cos\varphi_2 = a$$</div>
+                    <div class="formula">$$-l_1 \omega_1^2 \sin\varphi_1 + l_2 \varepsilon_2 \cos\varphi_2 - l_2
+                        \omega_2^2 \sin\varphi_2 = 0$$</div>
+                    <p>Se rezolvă pentru $a$ și $\varepsilon_2$.</p>
                 </div>
 
-                <p class="text-center mt-6 text-gray-400">Acestea sunt informațiile principale extrase. Platforma va fi actualizată continuu.</p>
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 5: Aplicație: Analiză Structural-Cinematică a unui Mecanism
+                        Plan</h3>
+                    <p>Acest curs prezintă o aplicație practică pentru analiza structurală și cinematică a unui mecanism
+                        plan specific (conform CURS_4_Aplicatie.pdf).</p>
+                    <h4>5.1. Descrierea Mecanismului și Date Inițiale</h4>
+                    <p>Se consideră un mecanism format dintr-o manivelă (1), o bielă (2) și un piston (3). Manivela 1
+                        este elementul conducător, acționat de un motor.</p>
+                    <ul>
+                        <li><strong>Elemente:</strong> Manivela 1 (rotație în A), Biela 2 (mișcare plan-paralelă),
+                            Piston 3 (translație verticală).</li>
+                        <li><strong>Cuple:</strong> A (rotație, fixă), B (rotație), C (rotație, legătura bielă-piston),
+                            Pistonul culisează într-un ghidaj fix.</li>
+                        <li><strong>Dimensiuni (exemplu):</strong> $AB = l_1 = 0.1$ m, $BC = l_2 = 0.5$ m. Coordonatele
+                            punctului fix A: $X_A=0, Y_A=0$. Coordonatele punctului P (pe axa de translație a
+                            pistonului): $X_P=0.2$ m, $Y_P=0$.</li>
+                        <li><strong>Date cinematice element conducător (manivela 1):</strong>
+                            <ul>
+                                <li>Viteză unghiulară: $\omega_1 = 5 + k$ [rad/s] (constantă), unde $k$ este un număr
+                                    specific (ex: nr. crt. student).</li>
+                                <li>Pas unghiular pentru analiză: $\Delta\varphi_1 = 10^\circ$.</li>
+                                <li>Poziția manivelei la un moment dat: $\varphi_1 = k \cdot \Delta\varphi_1$ (unde $k$
+                                    aici poate fi un index al poziției).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>5.2. Cerințe Analiză Structurală</h4>
+                    <ol>
+                        <li><strong>Gradul de mobilitate:</strong> Se calculează folosind formula $M = 3m - 2i - s$. Se
+                            identifică $m, i, s$.</li>
+                        <li><strong>Schema structurală și grupele Assur:</strong> Se desenează modelul structural, se
+                            identifică elementul conducător (GMA) și grupele Assur (GMP), specificând clasa, ordinul și
+                            aspectul acestora.</li>
+                        <li><strong>Clasa mecanismului:</strong> Se stabilește pe baza structurii.</li>
+                    </ol>
+
+                    <h4>5.3. Cerințe Analiză Cinematică</h4>
+                    <ol>
+                        <li><strong>Parametri de poziție pentru o poziție $\varphi_1$ dată:</strong>
+                            <ul>
+                                <li>Se reprezintă grafic mecanismul pentru un $\varphi_1$ specificat.</li>
+                                <li>Se determină analitic sau grafic $\varphi_2$ (unghiul bielei BC cu o referință) și
+                                    $S_C$ (poziția pistonului C, de obicei coordonata $Y_C$).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Pozițiile extreme ale pistonului:</strong>
+                            <ul>
+                                <li>Se identifică și se reprezintă grafic mecanismul în pozițiile extreme (punct mort
+                                    superior și inferior) ale pistonului 3.</li>
+                                <li>Se determină valorile corespunzătoare pentru $\varphi_1, \varphi_2, S_C$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Cursa pistonului:</strong> $S_{piston} = |S_{C,max} - S_{C,min}|$.</li>
+                        <li><strong>Ecuații de poziții, viteze și accelerații:</strong> Se scriu ecuațiile vectoriale de
+                            închidere a conturului și se derivează succesiv pentru a obține ecuațiile pentru viteze și
+                            accelerații, similar cu mecanismul manivelă-piston general, dar adaptat la geometria
+                            specifică (piston vertical, posibil excentric).</li>
+                        <li><strong>Valori numerice:</strong> Pentru o poziție $\varphi_1$ dată (și $\omega_1$ cunoscut,
+                            $\varepsilon_1=0$), se calculează valorile numerice pentru $\varphi_2, S_C, \omega_2, v_C,
+                            \varepsilon_2, a_C$.</li>
+                    </ol>
+                    <p>Această aplicație permite consolidarea cunoștințelor teoretice prin rezolvarea unui caz concret.
+                    </p>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 6: Echilibrarea Mecanismelor</h3>
+                    <p>Echilibrarea mecanismelor are ca scop reducerea sau anularea forțelor și momentelor de inerție
+                        neechilibrate care apar în timpul funcționării, datorită maselor în mișcare. Aceste forțe pot
+                        provoca vibrații, zgomot, uzură prematură și solicitări suplimentare asupra batiului și
+                        lagărelor.</p>
+                    <h4>6.1. Principii și Avantaje</h4>
+                    <ul>
+                        <li><strong>Scop:</strong> Anularea sau diminuarea efectului forțelor de inerție.</li>
+                        <li><strong>Condiție pentru echilibrare statică (mecanisme plane cu $M=1$):</strong> Centrul de
+                            masă total al sistemului (elemente mobile + contragreutăți) trebuie să rămână într-un punct
+                            fix (ideal, în axa de rotație a elementului conducător) pe durata întregii mișcări.</li>
+                        <li><strong>Avantaje:</strong>
+                            <ul>
+                                <li>Reducerea solicitărilor dinamice în cuple și pe batiu.</li>
+                                <li>Diminuarea vibrațiilor și zgomotului.</li>
+                                <li>Creșterea duratei de viață a mecanismului.</li>
+                                <li>Funcționare mai lină la viteze ridicate.</li>
+                                <li>Reducerea consumului de energie (prin eliminarea lucrului mecanic rezistent al
+                                    forțelor de inerție).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>6.2. Metoda Concentrării Maselor (Repartizării Statice)</h4>
+                    <p>Pentru un element de masă $m$ și lungime $l$, cu centrul de masă G la distanța $s$ de o
+                        extremitate A, masa sa poate fi considerată concentrată static în extremitățile A și B:</p>
+                    <div class="formula">$$m_A = m \frac{l-s}{l}$$</div>
+                    <div class="formula">$$m_B = m \frac{s}{l}$$</div>
+                    <p>unde $m_A + m_B = m$ și $m_A \cdot s = m_B \cdot (l-s)$ (condiția de echivalență statică).</p>
+
+                    <h4>6.3. Echilibrarea Statică a Mecanismului Patrulater Articulat (R-RRR)</h4>
+                    <p>Se consideră masele elementelor $m_1, m_2, m_3$ și pozițiile centrelor lor de masă $G_1, G_2,
+                        G_3$ (la distanțele $s_1, s_2, s_3$ de cuplele $A_0, A, B$ respectiv).</p>
+                    <ol>
+                        <li><strong>Repartizarea maselor elementelor în cuple:</strong>
+                            <ul>
+                                <li>$m_{1A_0} = m_1 \frac{l_1-s_1}{l_1}$; $m_{1A} = m_1 \frac{s_1}{l_1}$</li>
+                                <li>$m_{2A} = m_2 \frac{l_2-s_2}{l_2}$; $m_{2B} = m_2 \frac{s_2}{l_2}$</li>
+                                <li>$m_{3B} = m_3 \frac{l_3-s_3}{l_3}$; $m_{3B_0} = m_3 \frac{s_3}{l_3}$</li>
+                            </ul>
+                        </li>
+                        <li><strong>Mase totale concentrate în cuplele mobile și fixe:</strong>
+                            <ul>
+                                <li>În $A_0$: $m_{A_0}^* = m_{1A_0}$</li>
+                                <li>În $A$: $m_A^* = m_{1A} + m_{2A}$</li>
+                                <li>În $B$: $m_B^* = m_{2B} + m_{3B}$</li>
+                                <li>În $B_0$: $m_{B_0}^* = m_{3B_0}$</li>
+                            </ul>
+                        </li>
+                        <li><strong>Adăugarea contragreutăților:</strong> Se adaugă mase adiționale (contragreutăți)
+                            pentru a aduce centrul de masă al fiecărui subansamblu rotitor în axa sa de rotație.
+                            <p><strong>Varianta 1 (contragreutăți pe manivelă și balansier):</strong></p>
+                            <ul>
+                                <li>Contragreutate $M_I$ pe prelungirea manivelei 1, la distanța $r_I$ de $A_0$: $M_I
+                                    \cdot r_I = m_A^* \cdot l_1 \Rightarrow M_I = m_A^* \frac{l_1}{r_I}$.</li>
+                                <li>Contragreutate $M_{II}$ pe prelungirea balansierului 3, la distanța $r_{II}$ de
+                                    $B_0$: $M_{II} \cdot r_{II} = m_B^* \cdot l_3 \Rightarrow M_{II} = m_B^*
+                                    \frac{l_3}{r_{II}}$.</li>
+                            </ul>
+                            <p>După echilibrare, masele efective în $A_0$ și $B_0$ devin $m'_{A_0} = m_{A_0}^* + m_A^* +
+                                M_I$ și $m'_{B_0} = m_{B_0}^* + m_B^* + M_{II}$. Centrul de masă al întregului mecanism
+                                echilibrat se va găsi pe segmentul $A_0B_0$. Pentru echilibrare perfectă, ar trebui ca
+                                acest centru de masă să fie fix.</p>
+                        </li>
+                    </ol>
+                    <p>Există și alte variante de plasare a contragreutăților (ex: pe bielă și manivelă, sau pe bielă și
+                        balansier), fiecare cu particularitățile sale de calcul.</p>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 7: Mecanisme cu Came și Tacheți</h3>
+                    <p>Mecanismele cu camă și tachet transformă mișcarea de rotație (sau translație) a camei într-o
+                        mișcare precisă și programată a tachetului. Contactul dintre camă (element conducător) și tachet
+                        (element condus) se realizează printr-o cuplă superioară ($C_4$).</p>
+                    <h4>7.1. Structură și Noțiuni Generale</h4>
+                    <ul>
+                        <li><strong>Cama:</strong> Element profilat care, prin mișcarea sa, impune o anumită lege de
+                            mișcare tachetului.</li>
+                        <li><strong>Tachet:</strong> Element care urmărește profilul camei și execută mișcarea
+                            comandată.</li>
+                        <li><strong>Structura tipică (M=1, N=1):</strong> $m=2$ elemente mobile (cama, tachetul),
+                            $C_5=2$ (lagărele camei și ghidajul/lagărul tachetului), $C_4=1$ (contactul camă-tachet). $M
+                            = 3(2) - 2(2) - 1(1) = 6 - 4 - 1 = 1$.</li>
+                    </ul>
+                    <h4>7.2. Clasificarea Mecanismelor cu Camă și Tachet</h4>
+                    <p>Clasificarea se face după caracteristicile constructive și cinematice ale:</p>
+                    <h5>A. Tachetului:</h5>
+                    <ul>
+                        <li><strong>După forma suprafeței de contact:</strong>
+                            <ul>
+                                <li>Tachet cu vârf (cuțit): contact punctiform, uzură mare.</li>
+                                <li>Tachet cu rolă: transformă frecarea de alunecare în rostogolire, reduce uzura.</li>
+                                <li>Tachet cu talpă plană: contact liniar (teoretic).</li>
+                                <li>Tachet cu talpă curbă (convexă/concavă).</li>
+                            </ul>
+                        </li>
+                        <li><strong>După tipul mișcării tachetului:</strong>
+                            <ul>
+                                <li>Tachet cu mișcare de translație.</li>
+                                <li>Tachet cu mișcare de rotație (oscilant).</li>
+                                <li>Tachet cu mișcare plan-paralelă (rar).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h5>B. Camei:</h5>
+                    <ul>
+                        <li><strong>După forma generală (curba directoare a profilului):</strong>
+                            <ul>
+                                <li>Camă disc (plană): profilul este pe fața discului.</li>
+                                <li>Camă cilindrică: profilul este un canal pe suprafața laterală a unui cilindru.</li>
+                                <li>Camă conică, globoidală (spațiale).</li>
+                            </ul>
+                        </li>
+                        <li><strong>După tipul mișcării camei:</strong>
+                            <ul>
+                                <li>Camă cu mișcare de rotație (cel mai frecvent).</li>
+                                <li>Camă cu mișcare de translație.</li>
+                            </ul>
+                        </li>
+                        <li><strong>După poziția profilului:</strong> Camă exterioară, camă interioară.</li>
+                    </ul>
+                    <h5>C. Ansamblului Camă-Tachet:</h5>
+                    <ul>
+                        <li><strong>După poziția relativă camă-tachet (pentru tachet de translație):</strong>
+                            <ul>
+                                <li>Mecanism cu tachet axial (centrat): axa tachetului trece prin axa de rotație a
+                                    camei.</li>
+                                <li>Mecanism cu tachet dezaxat (excentric): axa tachetului este la o distanță 'e' de axa
+                                    camei.</li>
+                            </ul>
+                        </li>
+                        <li><strong>După modul de asigurare a contactului:</strong>
+                            <ul>
+                                <li>Prin forță (resort, greutate, presiune fluid): cuplă deschisă.</li>
+                                <li>Prin ghidare (canal în camă, tachet cu două role): cuplă închisă.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>7.3. Elemente Geometrice (Camă Disc de Rotație, Tachet de Translație)</h4>
+                    <ul>
+                        <li><strong>Profilul camei:</strong>
+                            <ul>
+                                <li><strong>Cercul de bază ($r_0$ sau $R_b$):</strong> Cel mai mic cerc tangent la
+                                    profilul camei. Determină dimensiunea minimă a camei.</li>
+                                <li><strong>Profilul de urcare:</strong> Porțiunea care deplasează tachetul de la cercul
+                                    de bază spre poziția maximă.</li>
+                                <li><strong>Profilul de vârf (sau cercul de vârf $r_v$):</strong> Porțiunea unde
+                                    tachetul atinge deplasarea maximă.</li>
+                                <li><strong>Profilul de coborâre:</strong> Porțiunea care readuce tachetul de la poziția
+                                    maximă la cercul de bază.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Unghiuri de fază (pentru o rotație completă a camei, $360^\circ$):</strong>
+                            <ul>
+                                <li>$\varphi_u$ (sau $\varphi_1$): Unghiul de urcare.</li>
+                                <li>$\varphi_{ss}$ (sau $\varphi_2$): Unghiul de staționare superioară (tachetul în
+                                    repaus la cursa maximă).</li>
+                                <li>$\varphi_c$ (sau $\varphi_3$): Unghiul de coborâre.</li>
+                                <li>$\varphi_{si}$ (sau $\varphi_4$): Unghiul de staționare inferioară (tachetul în
+                                    repaus pe cercul de bază).</li>
+                                <li>$\varphi_u + \varphi_{ss} + \varphi_c + \varphi_{si} = 360^\circ$.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Cursa tachetului (h):</strong> Deplasarea maximă a tachetului: $h = s_{max} -
+                            s_{min}$. Pentru tachet axial cu rolă, $h \approx r_v - r_0$.</li>
+                        <li><strong>Excentricitatea (e):</strong> Distanța dintre axa de rotație a camei și axa de
+                            translație a tachetului (pentru tacheți dezaxați).</li>
+                        <li><strong>Deplasarea inițială a tachetului ($s_0$):</strong> Distanța de la axa camei la
+                            punctul de contact al tachetului când acesta este pe cercul de bază. Pentru tachet axial,
+                            $s_0 = r_0$. Pentru tachet dezaxat, $s_0^2 + e^2 = r_0^2$ (dacă $r_0$ e raza rolei și
+                            tachetul e cu rolă). Mai general, $s_0$ este coordonata tachetului pe cercul de bază.</li>
+                        <li><strong>Unghiul de presiune ($\alpha$):</strong> Unghiul dintre normala la profilul camei în
+                            punctul de contact și direcția de mișcare a tachetului. Valori mari ale $\alpha$ pot duce la
+                            blocarea mecanismului.</li>
+                    </ul>
+                    <h4>7.4. Avantaje și Dezavantaje</h4>
+                    <ul>
+                        <li><strong>Avantaje:</strong> Permit obținerea unor legi de mișcare precise și complexe;
+                            construcție relativ simplă; gabarit redus.</li>
+                        <li><strong>Dezavantaje:</strong> Uzură în cupla camă-tachet (mai ales la contact
+                            punctiform/liniar); forțe de contact mari; necesită proiectare atentă a profilului; limitări
+                            la viteze și sarcini mari (poate apărea "săritura" tachetului).</li>
+                    </ul>
+                    <h4>7.5. Legi de Mișcare pentru Tachet</h4>
+                    <p>Alegerea legii de mișcare (profilul camei) depinde de cerințele funcționale (viteză, accelerație,
+                        șocuri).</p>
+                    <p>Tipuri principale (pentru fazele de urcare/coborâre):</p>
+                    <ul>
+                        <li><strong>Parabolică (accelerație constantă):</strong> Simplă, dar cu șocuri la începutul și
+                            sfârșitul cursei.</li>
+                        <li><strong>Armonică simplă:</strong> Accelerație sinusoidală, funcționare mai lină decât cea
+                            parabolică.</li>
+                        <li><strong>Cicloidală:</strong> Accelerație cosinusoidală, fără șocuri teoretice, bună pentru
+                            viteze mari.</li>
+                        <li><strong>Polinomială:</strong> Flexibilă, permite impunerea mai multor condiții la limită.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 8: Mecanisme cu Roți Dințate (Partea I): Noțiuni Generale,
+                        Clasificări</h3>
+                    <h4>8.1. Noțiuni Introductive despre Roți Dințate</h4>
+                    <p><strong>Roata dințată</strong> este un organ de mașină format dintr-un corp de rotație (sau altă
+                        formă) prevăzut cu dinți pe periferia sa (dantură exterioară) sau în interior (dantură
+                        interioară). Se utilizează pentru transmiterea mișcării de rotație și a momentului de torsiune
+                        între arbori, prin contactul direct și succesiv al dinților.</p>
+                    <p><strong>Părți componente principale ale unei roți dințate:</strong></p>
+                    <ul>
+                        <li><strong>Coroana dințată:</strong> Partea exterioară (sau interioară) pe care sunt prelucrați
+                            dinții.</li>
+                        <li><strong>Butucul:</strong> Partea centrală prin care roata se fixează pe arbore (de obicei cu
+                            canal de pană).</li>
+                        <li><strong>Discul sau spițele:</strong> Elementul de legătură între coroană și butuc.</li>
+                    </ul>
+                    <h4>8.2. Clasificarea Roților Dințate</h4>
+                    <p>Se clasifică după mai multe criterii:</p>
+                    <ol>
+                        <li><strong>După forma suprafeței de rostogolire (suprafața pe care se "așază" dinții):</strong>
+                            <ul>
+                                <li><strong>Roți dințate cilindrice:</strong> Suprafețe de rostogolire cilindrice. Cazul
+                                    particular: <strong>cremaliera</strong> (roată cilindrică cu rază infinită, mișcare
+                                    de translație).</li>
+                                <li><strong>Roți dințate conice:</strong> Suprafețe de rostogolire conice. Cazul
+                                    particular: roți plane (unghiul conului de vârf $90^\circ$).</li>
+                                <li>Roți dințate hiperboloidale, melci și roți melcate, eliptice, spirale etc.</li>
+                            </ul>
+                        </li>
+                        <li><strong>După forma și direcția flancului dinților (față de generatoarea suprafeței de
+                                rostogolire):</strong>
+                            <ul>
+                                <li>Cu dantură dreaptă: Generatoarea dintelui este paralelă cu axa roții (la cilindrice)
+                                    sau se intersectează în vârful conului (la conice).</li>
+                                <li>Cu dantură înclinată (simplu înclinată): Generatoarea dintelui formează un unghi cu
+                                    axa roții.</li>
+                                <li>Cu dantură multiplu înclinată (în V - chevron, în W, în Z): Pentru preluarea
+                                    sarcinilor axiale.</li>
+                                <li>Cu dantură curbă (ex: Gleason pentru roți conice, Wildhaber-Novikov pentru
+                                    cilindrice).</li>
+                            </ul>
+                        </li>
+                        <li><strong>După poziția danturii față de corpul roții:</strong>
+                            <ul>
+                                <li>Cu dantură exterioară (cea mai comună).</li>
+                                <li>Cu dantură interioară.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h4>8.3. Angrenaje: Definiție și Clasificare</h4>
+                    <p><strong>Angrenajul</strong> este mecanismul elementar format din două (sau mai multe) roți
+                        dințate mobile în jurul unor axe cu poziție relativă fixă, unde o roată (conducătoare)
+                        antrenează cealaltă roată (condusă) prin acțiunea succesivă a dinților în contact.</p>
+                    <p><strong>Rol principal:</strong> Transmiterea mișcării de rotație și a puterii mecanice cu un
+                        raport de transmitere constant (cel mai adesea) sau variabil (la roți necirculare).</p>
+                    <p><strong>Raportul de transmitere ($i_{12}$):</strong> Raportul dintre viteza unghiulară (sau
+                        turația) roții conducătoare (1) și cea a roții conduse (2).</p>
+                    <div class="formula">$$i_{12} = \frac{\omega_1}{\omega_2} = \frac{n_1}{n_2}$$</div>
+                    <p>Pentru angrenaje cu roți dințate cilindrice, este și raportul numerelor de dinți:</p>
+                    <ul>
+                        <li>Angrenare exterioară: $i_{12} = -\frac{z_2}{z_1}$ (semnul minus indică sensuri de rotație
+                            opuse).</li>
+                        <li>Angrenare interioară: $i_{12} = \frac{z_2}{z_1}$ (ambele roți se rotesc în același sens).
+                        </li>
+                    </ul>
+                    <h5>Clasificarea Angrenajelor:</h5>
+                    <ol>
+                        <li><strong>După poziția relativă a axelor arborilor:</strong>
+                            <ul>
+                                <li><strong>Angrenaje cu axe paralele:</strong> Formate din roți cilindrice (cu dantură
+                                    dreaptă, înclinată, V).</li>
+                                <li><strong>Angrenaje cu axe concurente (care se intersectează):</strong> Formate din
+                                    roți conice (cu dantură dreaptă, înclinată, curbă).</li>
+                                <li><strong>Angrenaje cu axe încrucișate (care nu sunt nici paralele, nici
+                                        concurente):</strong> Ex: angrenaje elicoidale (cilindrice înclinate),
+                                    melc-roată melcată, hipoide.</li>
+                            </ul>
+                        </li>
+                        <li><strong>După tipul angrenării (contactului dintre roți):</strong>
+                            <ul>
+                                <li>Angrenaje exterioare.</li>
+                                <li>Angrenaje interioare.</li>
+                            </ul>
+                        </li>
+                        <li><strong>După forma profilului dinților:</strong>
+                            <ul>
+                                <li>Cu profil evolventic (cel mai răspândit, asigură $i=const.$).</li>
+                                <li>Cu profil cicloidal (folosit în ceasornicărie, mecanisme fine).</li>
+                                <li>Cu profil în arc de cerc (Novikov - pentru sarcini mari).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h4>8.4. Avantaje și Dezavantaje ale Angrenajelor</h4>
+                    <ul>
+                        <li><strong>Avantaje:</strong> Eficiență ridicată (98-99%); precizie în transmiterea mișcării
+                            ($i=const.$); durabilitate și fiabilitate; compactitate (transmit forțe mari în spațiu
+                            redus); adaptabilitate la diverse configurații; transmisie silențioasă (la roți
+                            elicoidale/curbe).</li>
+                        <li><strong>Dezavantaje:</strong> Costuri de fabricație ridicate (necesită precizie); proiectare
+                            complexă; zgomot și vibrații (la roți drepte, viteze mari); necesită lubrifiere eficientă;
+                            sensibilitate la erori de montaj și fabricație; limitate la transmiterea mișcării pe
+                            distanțe relativ mici.</li>
+                    </ul>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 9: Mecanisme cu Roți Dințate (Partea II): Elemente
+                        Geometrice ale Danturii</h3>
+                    <p>Pentru roțile dințate cilindrice cu dinți drepți și profil evolventic, se definesc următoarele
+                        elemente geometrice principale:</p>
+                    <h4>9.1. Cercuri Caracteristice:</h4>
+                    <ul>
+                        <li><strong>Cercul de cap (exterior), $d_a$:</strong> Cercul care trece prin vârfurile dinților.
+                            $d_a = d + 2h_a = m(z+2)$.</li>
+                        <li><strong>Cercul de divizare, $d$:</strong> Cercul teoretic de rostogolire fără alunecare, pe
+                            care se definesc pasul și modulul. $d = m \cdot z$.</li>
+                        <li><strong>Cercul de picior (interior), $d_f$:</strong> Cercul de la baza dinților. $d_f = d -
+                            2h_f = m(z-2.5)$ (pentru dantură standard).</li>
+                        <li><strong>Cercul de bază, $d_b$:</strong> Cercul generator al profilului evolventic. $d_b = d
+                            \cdot \cos\alpha$. Normala la profilul evolventic este tangentă la cercul de bază.</li>
+                    </ul>
+                    <h4>9.2. Înălțimi ale Dintelui:</h4>
+                    <ul>
+                        <li><strong>Înălțimea capului dintelui, $h_a$:</strong> Distanța radială de la cercul de
+                            divizare la cercul de cap. $h_a = m$ (standard).</li>
+                        <li><strong>Înălțimea piciorului dintelui, $h_f$:</strong> Distanța radială de la cercul de
+                            divizare la cercul de picior. $h_f = 1.25m$ (standard, include un joc la fundul dintelui
+                            $c^*m$, unde $c^*=0.25$).</li>
+                        <li><strong>Înălțimea totală a dintelui, $h$:</strong> $h = h_a + h_f = 2.25m$ (standard).</li>
+                    </ul>
+                    <h4>9.3. Parametri pe Cercul de Divizare:</h4>
+                    <ul>
+                        <li><strong>Pasul circular (pasul danturii), $p$:</strong> Distanța pe arcul cercului de
+                            divizare între două flancuri omonime (ex: stânga-stânga) a doi dinți consecutivi. $p = \pi
+                            \cdot d / z = \pi \cdot m$.</li>
+                        <li><strong>Modulul, $m$:</strong> Parametru fundamental standardizat care definește mărimea
+                            dintelui. $m = p / \pi = d / z$. Toate roțile care angrenează trebuie să aibă același modul
+                            (și același unghi de presiune).</li>
+                        <li><strong>Grosimea dintelui pe cercul de divizare, $s_d$:</strong> $s_d = p/2 = \pi m / 2$
+                            (pentru dantură necorectată).</li>
+                        <li><strong>Lățimea golului pe cercul de divizare, $e_d$:</strong> $e_d = p/2 = \pi m / 2$
+                            (pentru dantură necorectată).</li>
+                    </ul>
+                    <h4>9.4. Alte Elemente Geometrice:</h4>
+                    <ul>
+                        <li><strong>Unghiul de presiune de divizare, $\alpha$:</strong> Unghiul dintre normala comună la
+                            profilurile dinților în punctul de contact de pe linia centrelor (polul angrenării) și
+                            tangenta comună la cercurile de divizare în acel punct. Standardizat $\alpha = 20^\circ$.
+                        </li>
+                        <li><strong>Jocul la capul dintelui (radial), $j_c$ (sau $c \cdot m$):</strong> Diferența dintre
+                            înălțimea piciorului unui dinte și înălțimea capului dintelui conjugat. $j_c = h_f - h_a =
+                            0.25m$ (standard).</li>
+                        <li><strong>Lățimea danturii, $b$:</strong> Dimensiunea dintelui de-a lungul axei roții.</li>
+                    </ul>
+                    <p>Aceste elemente sunt cruciale pentru proiectarea, fabricarea și funcționarea corectă a
+                        angrenajelor.</p>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 10: Mecanisme cu Roți Dințate (Partea III): Evolventa, Legea
+                        Angrenării, Grad de Acoperire</h3>
+                    <h4>10.1. Profilul Evolventic</h4>
+                    <p><strong>Evolventa cercului</strong> este curba descrisă de un punct al unei drepte care se
+                        rostogolește fără alunecare pe un cerc fix, numit <strong>cerc de bază ($r_b$)</strong>. Este
+                        cel mai utilizat profil pentru dinții roților dințate deoarece asigură un raport de transmitere
+                        constant.</p>
+                    <p><strong>Proprietăți importante ale evolventei:</strong></p>
+                    <ul>
+                        <li>Normala în orice punct al evolventei este tangentă la cercul de bază.</li>
+                        <li>Raza de curbură într-un punct al evolventei este egală cu lungimea tangentei de la acel
+                            punct la cercul de bază.</li>
+                        <li>Evolventa nu are puncte în interiorul cercului de bază (începe de pe cercul de bază).</li>
+                        <li>Forma profilului depinde doar de raza cercului de bază $r_b$.</li>
+                    </ul>
+                    <p>Ecuațiile parametrice ale evolventei în coordonate polare ($\rho, \psi$) față de centrul cercului
+                        de bază, unde $\alpha$ este unghiul de rulare (unghiul de presiune în punctul curent):</p>
+                    <div class="formula">$$\rho = \frac{r_b}{\cos\alpha}$$</div>
+                    <div class="formula">$$\psi = \tan\alpha - \alpha = \text{inv}\alpha \quad \text{(involuta lui }
+                        \alpha \text{)}$$</div>
+                    <p>unde $\psi$ este unghiul polar al punctului de pe evolventă față de punctul de start al
+                        evolventei pe cercul de bază.</p>
+
+                    <h4>10.2. Legea Fundamentală a Angrenării</h4>
+                    <p>Pentru ca raportul de transmitere ($i = \omega_1/\omega_2$) între două roți dințate să fie
+                        constant pe toată durata angrenării unei perechi de dinți, este necesar și suficient ca
+                        <strong>normala comună la profilurile celor doi dinți în punctul lor de contact să treacă
+                            printr-un punct fix situat pe linia centrelor $O_1O_2$</strong>. Acest punct fix se numește
+                        <strong>polul angrenării (C)</strong>.</p>
+                    <p>Dacă această condiție este îndeplinită:</p>
+                    <div class="formula">$$i_{12} = \frac{\omega_1}{\omega_2} = \frac{O_2C}{O_1C} = \text{constant}$$
+                    </div>
+                    <p>Profilul evolventic satisface această lege. Polul angrenării C devine punctul de tangență al
+                        cercurilor de divizare (rostogolire).</p>
+
+                    <h4>10.3. Linia de Angrenare</h4>
+                    <p><strong>Linia de angrenare</strong> este locul geometric al punctelor de contact succesive dintre
+                        dinții celor două roți în timpul mișcării. Pentru angrenajele evolventice cu axe paralele, linia
+                        de angrenare este o <strong>dreaptă</strong>, tangentă interioară la cele două cercuri de bază
+                        ale roților. Această dreaptă face unghiul de presiune de angrenare $\alpha_w$ (de obicei
+                        $\alpha_w = \alpha = 20^\circ$) cu tangenta comună la cercurile de divizare în polul C.</p>
+                    <p>Segmentul efectiv de contact pe linia de angrenare este delimitat de punctele unde dinții intră
+                        și ies din angrenare (intersecțiile liniei de angrenare cu cercurile de cap ale celor două
+                        roți). Fie $K_1K_2$ acest segment.</p>
+                    <ul>
+                        <li><strong>Punctul de intrare în angrenare (I):</strong> Contactul începe între vârful dintelui
+                            roții conduse și piciorul dintelui roții conducătoare.</li>
+                        <li><strong>Punctul de ieșire din angrenare (E):</strong> Contactul încetează între vârful
+                            dintelui roții conducătoare și piciorul dintelui roții conduse.</li>
+                    </ul>
+                    <p>Lungimea activă a liniei de angrenare este $g_a = IE$.</p>
+
+                    <h4>10.4. Gradul de Acoperire ($\varepsilon_\alpha$)</h4>
+                    <p><strong>Gradul de acoperire</strong> reprezintă numărul mediu de perechi de dinți aflate simultan
+                        în contact (în angrenare). Pentru o funcționare continuă și lină, fără întreruperi în
+                        transmiterea mișcării, este esențial ca $\varepsilon_\alpha  1$. Uzual, $\varepsilon_\alpha =
+                        1.2 \ldots 1.8$ pentru angrenaje cilindrice drepte.</p>
+                    <p>Se calculează ca raport între lungimea arcului de angrenare pe cercul de bază și pasul pe cercul
+                        de bază ($p_b = p \cos\alpha = \pi m \cos\alpha$):</p>
+                    <div class="formula">$$\varepsilon_\alpha = \frac{g_a}{p_b}$$</div>
+                    <p>unde $g_a$ este lungimea segmentului activ al liniei de angrenare.</p>
+                    <p>Un $\varepsilon_\alpha  1$ ar însemna că o pereche de dinți iese din contact înainte ca
+                            următoarea să intre, ducând la funcționare cu șocuri sau imposibilă.</p>
+                </div>
+
+                <div class="course-section">
+                    <h3 class="text-2xl font-semibold">Curs 11: Mecanisme Planetare (Epicicloidale)</h3>
+                    <p>Mecanismele planetare (sau epicicloidale) sunt angrenaje complexe în care cel puțin o roată
+                        dințată (numită <strong>satelit</strong>) execută o mișcare de rotație în jurul propriei axe,
+                        iar această axă se rotește și ea în jurul axei unei alte roți (numită <strong>roată
+                            centrală</strong> sau solară).</p>
+                    <h4>11.1. Elemente Componente Tipice:</h4>
+                    <ul>
+                        <li><strong>Roți centrale (solare):</strong> Roți dințate cu axă fixă (sau care poate fi
+                            elementul de intrare/ieșire) în jurul căreia se mișcă restul sistemului. Pot fi una sau două
+                            (una exterioară, una interioară - coroană). Notate $R_1, R_3$ etc.</li>
+                        <li><strong>Roți satelit:</strong> Roți dințate care angrenează cu roțile centrale și/sau între
+                            ele. Axele lor sunt mobile. Notate $R_2$ etc. Pot fi mai mulți sateliți identici pentru
+                            distribuirea sarcinii.</li>
+                        <li><strong>Braț port-satelit (H sau s):</strong> Elementul structural care susține axele mobile
+                            ale sateliților și se rotește în jurul axei centrale a mecanismului.</li>
+                    </ul>
+                    <h4>11.2. Clasificare și Grad de Mobilitate</h4>
+                    <p>Mecanismele planetare simple au de obicei 2 grade de mobilitate ($M=2$) dacă toate elementele
+                        (roțile centrale și brațul) sunt libere să se rotească. Pentru a funcționa ca un
+                        reductor/multiplicator cu un singur grad de mobilitate ($M=1$), una dintre componente (o roată
+                        centrală sau brațul) trebuie fixată (devine parte a batiului) sau i se impune o mișcare
+                        cunoscută.</p>
+                    <ul>
+                        <li><strong>Planetare propriu-zise ($M=1$):</strong> O roată centrală este fixă. Utilizate ca
+                            reductoare/multiplicatoare compacte cu rapoarte mari.</li>
+                        <li><strong>Diferențiale ($M=2$):</strong> Niciun element nu este fixat inițial. Permit
+                            însumarea sau diferențierea a două mișcări de intrare pentru a obține o mișcare de ieșire,
+                            sau distribuirea unei mișcări de intrare la două ieșiri (ex: diferențialul auto).</li>
+                        <li><strong>Compuse:</strong> Mai multe seturi de roți centrale și sateliți.</li>
+                    </ul>
+                    <h4>11.3. Analiza Cinematică - Metoda lui Willis</h4>
+                    <p>Metoda lui Willis este o tehnică fundamentală pentru determinarea raportului de transmitere și a
+                        turațiilor într-un mecanism planetar.</p>
+                    <p><strong>Principiul:</strong> Se consideră o mișcare relativă. Se imprimă întregului mecanism o
+                        rotație egală și de sens contrar cu cea a brațului port-satelit ($-\omega_H$ sau $-n_H$). În
+                        acest sistem de referință mobil (legat de braț), brațul devine fix ($n_H^H = n_H - n_H = 0$),
+                        iar mecanismul planetar se transformă într-un tren de angrenaje obișnuit cu axe fixe, pentru
+                        care se pot scrie ușor rapoartele de transmitere.</p>
+                    <p>Turațiile relative ale roților $k$ față de brațul H sunt: $n_k^H = n_k - n_H$.</p>
+                    <p>Pentru un angrenaj simplu format dintr-o roată centrală 1, un satelit 2 și brațul H, raportul de
+                        transmitere între roata 1 și satelitul 2, relativ la brațul H este:</p>
+                    <div class="formula">$$i_{12}^H = \frac{n_1^H}{n_2^H} = \frac{n_1 - n_H}{n_2 - n_H} = \pm
+                        \frac{z_2}{z_1}$$</div>
+                    <p>(Semnul depinde de tipul angrenării dintre 1 și 2: "-" pentru exterior, "+" pentru interior).</p>
+                    <p><strong>Formula generală a lui Willis</strong> pentru un mecanism planetar cu o intrare (element
+                        1), o ieșire (element $k$) și brațul H:</p>
+                    <div class="formula">$$i_{1k}^H = \frac{n_1 - n_H}{n_k - n_H} = \text{produsul rapoartelor de
+                        transmitere din lanțul cu axe fixe (relativ la H)}$$</div>
+                    <p>De exemplu, dacă $n_1$ (turația roții solare conducătoare) și $n_H$ (turația brațului) sunt
+                        cunoscute, se poate calcula $n_k$ (turația roții conduse). Dacă o roată $k$ este fixă ($n_k=0$),
+                        formula se simplifică.</p>
+
+                    <h4>11.4. Avantaje și Dezavantaje</h4>
+                    <ul>
+                        <li><strong>Avantaje:</strong> Rapoarte de transmitere mari în gabarit redus; posibilitatea de a
+                            însuma/descompune mișcări (la diferențiale); distribuirea sarcinii pe mai mulți sateliți
+                            (capacitate portantă mare); coaxialitatea arborilor de intrare și ieșire.</li>
+                        <li><strong>Dezavantaje:</strong> Construcție mai complexă și costisitoare; randament potențial
+                            mai mic din cauza frecărilor multiple (mai ales la rapoarte mari); montaj și reglaj
+                            pretențios; necesită lubrifiere bună.</li>
+                    </ul>
+                </div>
+
+                <p class="text-center mt-6 text-gray-400">Acestea sunt informațiile principale extrase și simplificate
+                    din materialele de curs. Platforma va fi actualizată continuu.</p>
             </div>
         </section>
 
         <section id="quiz" class="content-section hidden">
             <div class="content-card p-6 sm:p-8 rounded-lg shadow-xl">
                 <h2 class="text-3xl font-semibold mb-6">Testează-ți Cunoștințele</h2>
-                <div id="quiz-container" class="space-y-6">
-                    </div>
-                <button id="submit-quiz" class="button-accent mt-8 px-6 py-3 rounded-md text-lg font-semibold w-full sm:w-auto">Verifică Răspunsurile</button>
+                <div id="quiz-container" class="space-y-6"></div>
+                <button id="submit-quiz"
+                    class="button-accent mt-8 px-6 py-3 rounded-md text-lg font-semibold w-full sm:w-auto">Verifică
+                    Răspunsurile</button>
                 <div id="quiz-results" class="mt-8 text-xl font-semibold"></div>
             </div>
         </section>
+
+        <section id="data" class="content-section hidden">
+            <div class="content-card p-6 sm:p-8 rounded-lg shadow-xl">
+                <h2 class="text-3xl font-semibold mb-6">Date Extrase (Text Brut din PDF-uri)</h2>
+
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: CURS_1_2025.pdf</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS
+
+MECANISME
+
+Sl.dr.ing. Elisabeta NICULAE
+
+
+--- PAGE 2 ---
+
+INTRODUCERE
+
+CONCEPTE FUNDAMENTALE: SISTEM, SISTEM MECANIC, MASINA, MECANISM
+
+Prin SISTEM se întelege o mulţime de elemente, între care se stabilesc legături (sunt în interdependenţă) şi alcătuiesc un
+ întreg organizat. La un sistem este important de ştiut structura şi starea acestuia. Structura sistemului este dată de mulţimea
+ elementelor şi ordonarea legăturilor interioare, iar starea sistemului este definită de valorile parametrilor ce caracterizează
+ proprietăţile elementelor şi relaţiile acestora cu exteriorul, la un moment dat.
+
+SISTEMUL MECANIC este un sistem tehnic ale cărui elemente sunt în totalitate corpuri solide capabile să transmită
+ mişcările mecanice şi forţele ce le determină. Sistemele mecanice se împart în sisteme mecanice fixe şi sisteme mecanice
+ mobile.
+
+SISTEM MECANIC FIX este sistemul mecanic în care elementele nu transmit miscări, ci numai forţe. Din categoria
+ sistemelor mecanice fixe fac parte: podurile, acoperitorile etc.
+
+SISTEM MECANIC MOBIL este sistemul mecanic în care elementele transmit mişcări şi forţe. Din categoria sistemelor
+ mecanice mobile fac parte: maşinile şi MECANISMELE.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: CURS_2-3_2025.pdf</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS 2
+
+MECANISME
+
+2025
+
+Sl.dr.ing. Elisabeta NICULAE
+
+
+--- PAGE 2 ---
+
+GRADUL DE MOBILITATE
+
+Prin grad de mobilitate (M) al unui mecanism se înţelege numărul parametrilor
+ independenţi care poziţionează elementul sau elementele mobile în raport cu elementul fix
+
+sau considerat fix. Acesta exprimă numărul elementelor conducătoare ale unui sistem
+ mecanic (numărul grupelor modulare active sau numarul motoarelor).
+
+$M=3\times m-2\times i-s$, $n=m+1$ 
+
+în care:
+
+n numărul total al elementelor cinematice (elementele cinematice mobile
+ şi elementul fix sau considerat fix);
+
+m
+
+numărul elementelor cinematice mobile.
+
+i - numărul cuplelor cinematice de rotaţie sau de translaţie care intră în
+
+S
+
+componenţa respectivului mecanism;
+
+numărul cuplelor cinematice superioare din sistem.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: CURS_4_2025.pdf</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS 4
+
+ANALIZA CINEMATICA A MECANISMELOR
+
+NOTIUNI INTRODUCTIVE
+
+Sl.dr.ing. NICULAE Elisabeta
+
+
+--- PAGE 2 ---
+
+Partea de cinematica a mecanismelor studiaza
+
+miscarea punctelor si elementelor cinematice ce
+ alcatuiesc mecanismul,determinand poziţii, viteze
+ şi acceleraţii.
+
+Parametrii dependenţi pot fi liniari sau
+
+unghiulari, funcţie de mişcările executate
+
+(translaţie sau rotaţie).
+
+Etapele de calcul cinematic se obțin parcurgând schema
+
+de conexiuni de la prima grupă
+
+modulară activă până la ultima grupă modulară pasivă
+
+Grupele modulare active și pasive sunt caracterizate de
+ parametrii independenţi de poziții, viteze și acceleraţii liniare
+ sau unghiulare, funcţie de mişcarea fiecărei grupe în parte.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: CURS_4_Aplicatie.pdf</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+Curs 4
+
+Mecanisme - continuare
+
+ANALIZA STRUCTURAL - CINEMATICA A MECANISMULUI DIN FIG.1
+
+Se consideră mecanismul plan din Figura 1.
+
+$(\Delta T)$ 
+
+C
+
+3
+
+2
+
+Ay
+
+Bo
+ 1
+
+$P_{1}$ 
+ A
+
+P
+
+X
+
+Fig. 1. Mecanism plan
+
+Mecanismul este pus în funcțiune prin intermediul unui motor electric care
+ acţionează asupra manivelei 1 (element conducător). In structura mecanismului plan,
+ în afara manivelei (care efectuează rotație completă în jurul punctului A) există biela
+ 2 (cu mişcare plan-paralelă) şi pistonul 3 (cu mişcare de translaţie pe verticală). Se
+ cunosc următoarele:
+
+Lungimea elementelor [m]:
+
+$X_{A}=Y_{A}=0$ $AB=0.1$; $BC=0.5$ $X_{P}=0.2$ $Y_{P}=0$ 
+
+Viteza unghiulară la elementul conducător (considerată constantă) este:
+ $\omega_{1}=5+k$
+
+, exprimată în [rad/s]; k reprezintă nr. crt. din lista grupei $(k=1,2,3...)$ 
+ Pasul unghiular, notat $\Delta\varphi_{1}$, stabilit pentru rotaţia completă a manivelei este egal
+ cu $10^{\circ}$ Unghiul făcut de elementul conducător (manivela) cu axa Ax la un anumit
+ moment este $\varphi_{1}=k~\Delta\varphi_{1}$ 
+
+Să se determine:
+
+1) Analiza structurală a mecanismului plan
+
+a) Stabilirea gradului de mobilitate al mecanismului plan, considerând numărul de
+ elemente mobile, numărul şi clasa cuplelor cinematice.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: Curs_5_2025.pdf (Echilibrare)</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+Curs
+
+Echilibrarea mecanismelor si a masinilor
+
+Echilibrarea statica a mecanismului patrulater articulat
+
+Sl.dr.ing. Niculae Elisabeta
+
+
+--- PAGE 2 ---
+
+Echilibrarea mecanismelor este esențială pentru reducerea forțelor și momentelor
+ care acţionează asupra cadrelor de susținere, îmbunătățind astfel funcţionarea
+ mecanismului și reducând uzura.
+
+Condiţia necesară şi suficientă pentru echilibrarea statică a unui
+ mecanism plan cu un grad de mobilitate este ca centrul de masa al
+ sistemului să fie plasat într-un punct fix.
+
+Echilibrarea unui mecanism reprezintă un ansamblu de măsuri care
+ are drept scop anularea sau diminuarea efectului forţelor de
+ inerţie, având ca principal beneficiu reducerea consumului de
+ energie.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: Curs_6_2025.pdf (Came și Tacheți)</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS
+
+Mecanisme cu came si tacheti
+
+Noţiuni teoretice. clasificarea mecanismelor cu came.
+
+Principalele elemente geometrice și cinematice ale mecanismelor cu cama și tachet
+
+Sl.dr.ing. NICULAE Elisabeta
+
+
+--- PAGE 2 ---
+
+Mecanismele camă-tachet sunt utilizate în diverse aplicații industriale și mecanice datorită capacității lor de a transforma
+ mişcarea rotativă în mișcări precise și controlate. Câteva domenii și exemple unde acestea sunt utilizate frecvent:
+
+1. Motoare cu ardere internă
+
+Controlul supapelor: Mecanismele camă-tachet sunt esențiale în deschiderea și închiderea supapelor de admisie și
+ evacuare în motoarele cu ardere internă. Acestea asigură sincronizarea mișcării supapelor cu rotația arborelui cotit,
+ contribuind la optimizarea procesului de combustie.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: Curs_9-10_RD_2025.pdf (Roți Dințate)</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS ROTI DINTATE
+
+1.1. Noţiuni introductive
+
+Rotile dințate sunt organe de maşini alcătuite din corpuri de rotație, sau de altă formă,
+ prevăzute cu dantură exterioară, sau interioară.
+
+Ele se utilizează la transmiterea mişcării de rotație și a momentului de torsiune prin
+ contactul direct al dinților, realizând astfel un raport de transmitere (care se definește ca raportul
+ dintre turația roții conducătoare și a celei conduse) constant, sau variabil.
+
+Părțile componente ale unei roți dințate sunt :
+
+ coroana, partea pe care se află dantura;
+
+ butucul, partea cu care se fixează pe arbore;
+
+• discul, sau spițele, sunt elementele care fac legătura dintre butuc și coroană.
+                    </pre>
+                </div>
+                <div class="course-section">
+                    <h3 class="text-xl font-semibold">Sursa: Curs_11_RD_2025.docx.pdf (Roți Dințate - continuare,
+                        Planetare)</h3>
+                    <pre class="data-pre">
+--- PAGE 1 ---
+
+CURS CONTINUARE MECANISME CU ROTI DINTATE
+
+Evolventa
+
+Legea fundamentala a angrenarii
+
+Grad de acoperire
+
+Sl.dr.ing. NICULAE ELISABETA
+
+
+--- PAGE 2 ---
+
+Mecanismele cu roţi dinţate fac parte din categoria mecanismelor cu
+ cuple superioare.
+
+Transmiterea mişcării de rotaţie, respectiv a momentului de torsiune
+ (răsucire) de la roata conducătoare la roata condusă, se realizează prin
+ acţiunea dinţilor aflaţi succesiv în contact, datorită presiunii $(F_{n})$ pe care
+ dinţii roţii conducătoare o exercită asupra dinţilor roţii conduse.
+ Angrenajul reprezinta mecanismul elementar format din 2 roti dintate,
+ mobile in jurul axelor, a caror pozitie relativa este invariabila (constanta) si
+ la care o roata o angreneaza pe cealalta prin actiunea dintilor care intra
+ succesiv si continuu in angrenare.
+                    </pre>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer class="bg-gray-800 bg-opacity-50 text-center py-6 border-t border-yellow-600">
-        <p class="text-gray-400">&copy; 2025 Platformă Învățare Mecanisme. Toate drepturile rezervate.</p>
+    <footer class="bg-gray-800 text-gray-400 text-center p-4 mt-auto">
+        <p>&copy; <span id="currentYear"></span> Platformă Învățare Mecanisme. Dezvoltat de AI.</p>
     </footer>
 
     <script>
-        // Datele pentru Quiz
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const sections = {
+            acasa: document.getElementById('acasa'),
+            cursuri: document.getElementById('cursuri'),
+            quiz: document.getElementById('quiz'),
+            data: document.getElementById('data')
+        };
+
+        const navLinks = {
+            acasa: document.getElementById('nav-acasa'),
+            cursuri: document.getElementById('nav-cursuri'),
+            quiz: document.getElementById('nav-quiz'),
+            data: document.getElementById('nav-data')
+        };
+
+        function showSection(sectionId) {
+            Object.values(sections).forEach(section => section.classList.add('hidden'));
+            Object.values(navLinks).forEach(link => link.classList.remove('active'));
+
+            if (sections[sectionId]) {
+                sections[sectionId].classList.remove('hidden');
+            }
+            if (navLinks[sectionId]) {
+                navLinks[sectionId].classList.add('active');
+            }
+            window.scrollTo(0, 0); // Scroll to top of page
+        }
+
+        // Navigation event listeners
+        navLinks.acasa.addEventListener('click', (event) => {
+            event.preventDefault();
+            showSection('acasa');
+        });
+        navLinks.cursuri.addEventListener('click', (event) => {
+            event.preventDefault();
+            showSection('cursuri');
+        });
+        navLinks.quiz.addEventListener('click', (event) => {
+            event.preventDefault();
+            showSection('quiz');
+            if (typeof generateQuiz === 'function') { // Check if generateQuiz exists
+                generateQuiz(); // Generam quiz-ul cand se acceseaza sectiunea
+            }
+        });
+        navLinks.data.addEventListener('click', (event) => {
+            event.preventDefault();
+            showSection('data');
+        });
+
+
+        // --- QUIZ LOGIC ---
+        const quizContainer = document.getElementById('quiz-container');
+        const submitQuizButton = document.getElementById('submit-quiz');
+        const quizResultsContainer = document.getElementById('quiz-results');
+
         const quizData = [
             {
-                question: "Ce reprezintă elementul fix într-un mecanism?",
+                question: "Ce studiază cinematica mecanismelor?",
                 options: [
-                    "Elementul cu cea mai complexă mișcare",
-                    "Elementul în raport cu care se analizează mișcările celorlalte elemente (Batiu)",
-                    "Elementul care primește energie de la motor",
-                    "Elementul cu cea mai mare masă"
+                    "Forțele și momentele din mecanisme.",
+                    "Mișcarea punctelor și elementelor cinematice (poziții, viteze, accelerații).",
+                    "Materialele din care sunt construite mecanismele.",
+                    "Randamentul energetic al mecanismelor."
                 ],
-                answer: "Elementul în raport cu care se analizează mișcările celorlalte elemente (Batiu)",
-                explanation: "Batiul este elementul considerat imobil, servind drept referință pentru mișcările celorlalte componente ale mecanismului."
+                answer: "Mișcarea punctelor și elementelor cinematice (poziții, viteze, accelerații).",
+                explanation: "Cinematica se ocupă cu studiul mișcării fără a considera cauzele acesteia (forțele). Vezi Curs 4."
             },
             {
-                question: "Care este formula generală pentru gradul de mobilitate (M) al unui mecanism plan?",
+                question: "Care este formula gradului de mobilitate (M) pentru mecanisme plane?",
                 options: [
-                    "$M = 2m - 3C_5 - C_4$",
-                    "$M = 3m - 2C_5 - C_4$",
-                    "$M = 3m + 2C_5 + C_4$",
-                    "$M = m - C_5 - C_4$"
+                    "M = 3m - 2i + s",
+                    "M = 6m - 5C5 - C4",
+                    "M = 3m - 2i - s",
+                    "M = 2m - 3i - s"
                 ],
-                answer: "$M = 3m - 2C_5 - C_4$",
-                explanation: "Formula lui Cebîșev-Grübler-Kutzbach pentru mecanisme plane: M = 3m - 2C₅ - C₄, unde 'm' este numărul de elemente mobile, C₅ numărul de cuple inferioare (rotație, translație), iar C₄ numărul de cuple superioare."
+                answer: "M = 3m - 2i - s",
+                explanation: "Formula corectă pentru mecanisme plane este M = 3m - 2i - s, unde m este nr. elemente mobile, i nr. cuple inferioare, s nr. cuple superioare. Vezi Curs 2."
             },
             {
-                question: "Ce tip de cuplă este caracteristică mecanismelor cu camă și tachet, în zona de contact dintre camă și tachet?",
+                question: "Ce tip de cuplă realizează contactul dintre camă și tachet?",
                 options: [
-                    "Cuplă de rotație (clasa V)",
-                    "Cuplă de translație (clasa V)",
-                    "Cuplă superioară (clasa IV)",
-                    "Cuplă sferică"
+                    "Cuplă inferioară (C5)",
+                    "Cuplă superioară (C4)",
+                    "Cuplă de translație pură (T)",
+                    "Cuplă de rotație pură (R)"
                 ],
-                answer: "Cuplă superioară (clasa IV)",
-                explanation: "Contactul dintre camă și tachet este, de obicei, punctiform sau liniar, caracteristic cuplelor superioare (clasa IV)."
+                answer: "Cuplă superioară (C4)",
+                explanation: "Contactul dintre camă și tachet este de tip punctiform sau liniar, caracteristic cuplelor superioare C4. Vezi Curs 7."
             },
             {
-                question: "Într-un mecanism camă-tachet, care element este, de regulă, elementul conducător?",
-                options: ["Tachetul", "Batiul", "Cama", "Resortul de revenire"],
-                answer: "Cama",
-                explanation: "Cama, prin profilul său special proiectat, este elementul care impune mișcarea tachetului."
-            },
-            {
-                question: "Cum se numește tachetul a cărui suprafață de contact cu cama este o rolă?",
-                options: ["Tachet cu vârf", "Tachet cu disc plan", "Tachet cu rolă", "Tachet oscilant"],
-                answer: "Tachet cu rolă",
-                explanation: "Tachetul cu rolă utilizează o rolă pentru a reduce frecarea și uzura în contactul cu cama."
-            },
-            {
-                question: "Ce este o diadă în contextul analizei structurale a mecanismelor?",
+                question: "Ce reprezintă modulul (m) unei roți dințate?",
                 options: [
-                    "Un element cinematic cu două cuple",
-                    "O grupă structurală pasivă formată din 2 elemente și 3 cuple, având 2 cuple exterioare",
-                    "Un mecanism cu două grade de mobilitate",
-                    "O cuplă cinematică de clasa a II-a"
+                    "Numărul de dinți.",
+                    "Diametrul cercului de cap.",
+                    "Un parametru fundamental în dimensionarea danturii (m = p/π).",
+                    "Unghiul de presiune."
                 ],
-                answer: "O grupă structurală pasivă formată din 2 elemente și 3 cuple, având 2 cuple exterioare",
-                explanation: "Diada este cea mai simplă grupă structurală pasivă (Assur) de clasa a II-a, ordinul 2, cu $M=0$."
+                answer: "Un parametru fundamental în dimensionarea danturii (m = p/π).",
+                explanation: "Modulul este un raport standardizat esențial pentru proiectarea și fabricarea roților dințate. Vezi Curs 9."
             },
             {
-                question: "În analiza cinematică a mecanismului manivelă-piston (R-RRT), ce reprezintă 's'?",
-                options: ["Lungimea bielei", "Viteza pistonului", "Deplasarea pistonului", "Accelerația pistonului"],
-                answer: "Deplasarea pistonului",
-                explanation: "'s' reprezintă poziția (deplasarea) liniară a pistonului."
-            },
-            {
-                question: "Care este condiția necesară și suficientă pentru echilibrarea statică a unui mecanism plan cu un grad de mobilitate?",
+                question: "Ce este necesar conform legii fundamentale a angrenării pentru un raport de transmitere constant?",
                 options: [
-                    "Suma forțelor de inerție să fie zero",
-                    "Centrul de masă al sistemului să fie plasat într-un punct fix",
-                    "Momentul forțelor de inerție față de un pol să fie zero",
-                    "Viteza elementului conducător să fie constantă"
+                    "Dinții să fie elicoidali.",
+                    "Roțile să aibă același număr de dinți.",
+                    "Normala comună la profilurile dinților în punctul de contact să treacă prin polul angrenării.",
+                    "Materialul roților să fie identic."
                 ],
-                answer: "Centrul de masă al sistemului să fie plasat într-un punct fix",
-                explanation: "Pentru echilibrarea statică, se urmărește ca centrul de masă al întregului mecanism să rămână fix (sau să se miște pe o traiectorie dorită, de obicei fixă)."
+                answer: "Normala comună la profilurile dinților în punctul de contact să treacă prin polul angrenării.",
+                explanation: "Aceasta este condiția cheie pentru un raport de transmitere constant, îndeplinită de profilul evolventic. Vezi Curs 10."
             },
             {
-                question: "Ce este evolventa în contextul roților dințate?",
+                question: "În mecanismele planetare, care element susține axele roților satelit și se rotește în jurul axei centrale?",
                 options: [
-                    "O metodă de calcul a rezistenței dinților",
-                    "Un tip de lubrifiant special pentru angrenaje",
-                    "O curbă geometrică folosită frecvent pentru profilul dinților, care asigură un raport de transmitere constant",
-                    "Unghiul de înclinare al danturii"
+                    "Roata solară (centrală)",
+                    "Coroana dințată exterioară",
+                    "Brațul port-satelit (H)",
+                    "Satelitul principal"
                 ],
-                answer: "O curbă geometrică folosită frecvent pentru profilul dinților, care asigură un raport de transmitere constant",
-                explanation: "Profilul evolventic al dinților este preferat deoarece normala comună în punctul de contact trece mereu prin polul angrenării, asigurând constanța raportului de transmitere."
-            },
-            {
-                question: "Ce reprezintă gradul de acoperire ($\epsilon$) la angrenaje?",
-                options: [
-                    "Eficiența angrenajului",
-                    "Numărul mediu de perechi de dinți aflați simultan în contact",
-                    "Raportul dintre înălțimea și lățimea dintelui",
-                    "Rezistența la uzură a danturii"
-                ],
-                answer: "Numărul mediu de perechi de dinți aflați simultan în contact",
-                explanation: "Gradul de acoperire trebuie să fie supraunitar ($\epsilon > 1$) pentru a asigura o transmitere continuă a mișcării."
-            },
-             {
-                question: "Ce tip de mișcare NU este specifică unui element cinematic dintr-un mecanism plan?",
-                options: ["Rotație (R)", "Translație (T)", "Plan-paralelă (PP)", "Elicoidală"],
-                answer: "Elicoidală",
-                explanation: "Mișcarea elicoidală este o mișcare spațială, nu plană. Elementele mecanismelor plane efectuează rotații, translații sau mișcări plan-paralele."
-            },
-            {
-                question: "Cum se numește elementul unui mecanism plan care execută o rotație completă de 360 de grade?",
-                options: ["Bielă", "Balansier", "Piston", "Manivelă"],
-                answer: "Manivelă",
-                explanation: "Manivela este un element cu mișcare de rotație completă. Balansierul oscilează sub un unghi mai mic de 360 de grade."
+                answer: "Brațul port-satelit (H)",
+                explanation: "Brațul port-satelit este elementul care permite mișcarea de revoluție a sateliților în jurul axei centrale. Vezi Curs 11."
             }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
-        const submitButton = document.getElementById('submit-quiz');
-        const quizResults = document.getElementById('quiz-results');
+        function generateQuiz() {
+            if (!quizContainer) return; // Exit if container not found
+            quizContainer.innerHTML = ''; // Clear previous quiz
+            if (quizResultsContainer) quizResultsContainer.innerHTML = ''; // Clear previous results
 
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            document.getElementById(sectionId).classList.remove('hidden');
-
-            document.querySelectorAll('nav a').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.getElementById('nav-' + sectionId).classList.add('active');
-            
-            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-                MathJax.typesetPromise();
-            }
-        }
-
-        document.getElementById('nav-acasa').addEventListener('click', (e) => { e.preventDefault(); showSection('acasa'); });
-        document.getElementById('nav-cursuri').addEventListener('click', (e) => { e.preventDefault(); showSection('cursuri'); });
-        document.getElementById('nav-quiz').addEventListener('click', (e) => { e.preventDefault(); showSection('quiz'); });
-
-        showSection('acasa');
-
-        function buildQuiz() {
-            quizContainer.innerHTML = ''; // Clear previous quiz questions if any
             quizData.forEach((item, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.classList.add('question-block', 'p-4', 'border', 'border-gray-600', 'rounded-lg', 'bg-black', 'bg-opacity-10');
-                
-                const questionText = document.createElement('p');
-                questionText.classList.add('text-xl', 'font-medium', 'mb-4');
-                questionText.innerHTML = `${index + 1}. ${item.question}`;
-                questionDiv.appendChild(questionText);
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('mb-6', 'p-4', 'border', 'border-gray-700', 'rounded-lg', 'content-card');
 
-                const optionsDiv = document.createElement('div');
-                optionsDiv.classList.add('space-y-2');
-                
+                const questionTitle = document.createElement('h4');
+                questionTitle.classList.add('text-lg', 'font-semibold', 'mb-3', 'text-yellow-400');
+                questionTitle.textContent = `Întrebarea ${index + 1}: ${item.question}`;
+                questionElement.appendChild(questionTitle);
+
                 item.options.forEach(option => {
-                    const label = document.createElement('label');
-                    label.classList.add('quiz-option', 'block', 'p-3', 'rounded-md', 'cursor-pointer');
-                    
+                    const optionContainer = document.createElement('div');
+                    optionContainer.classList.add('quiz-option', 'p-3', 'mb-2', 'rounded-md', 'hover:bg-gray-700');
+
                     const input = document.createElement('input');
                     input.type = 'radio';
                     input.name = `question${index}`;
                     input.value = option;
-                    input.classList.add('mr-3', 'accent-yellow-500');
+                    input.id = `q${index}_${option.replace(/\s+/g, '_').replace(/[^\w-_]/g, '')}`; // Sanitize ID
+                    input.classList.add('mr-2');
 
-                    label.appendChild(input);
-                    label.appendChild(document.createTextNode(option));
-                    optionsDiv.appendChild(label);
+                    const label = document.createElement('label');
+                    label.htmlFor = input.id;
+                    label.textContent = option;
+                    label.classList.add('cursor-pointer');
 
-                    input.addEventListener('change', () => {
-                        document.querySelectorAll(`input[name="question${index}"]`).forEach(radio => {
-                            radio.parentElement.classList.remove('selected');
-                        });
-                        if (input.checked) {
-                            label.classList.add('selected');
-                        }
+                    optionContainer.appendChild(input);
+                    optionContainer.appendChild(label);
+                    questionElement.appendChild(optionContainer);
+
+                    optionContainer.addEventListener('click', () => {
+                        input.checked = true;
+                        Array.from(optionContainer.parentElement.querySelectorAll('.quiz-option')).forEach(el => el.classList.remove('selected'));
+                        optionContainer.classList.add('selected');
                     });
                 });
-                questionDiv.appendChild(optionsDiv);
-
-                const explanationDiv = document.createElement('div');
-                explanationDiv.classList.add('explanation', 'hidden', 'p-2', 'mt-2', 'rounded-md');
-                explanationDiv.innerHTML = `<strong>Explicație:</strong> ${item.explanation}`;
-                questionDiv.appendChild(explanationDiv);
-
-                quizContainer.appendChild(questionDiv);
+                quizContainer.appendChild(questionElement);
             });
-             if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-                MathJax.typesetPromise(); // Retypeset for quiz questions if they contain math
-            }
         }
 
-        submitButton.addEventListener('click', () => {
-            let score = 0;
-            quizData.forEach((item, index) => {
-                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
-                const questionBlock = quizContainer.children[index];
-                const explanationDiv = questionBlock.querySelector('.explanation');
-                
-                questionBlock.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.classList.remove('correct-answer', 'incorrect-answer');
+        if (submitQuizButton) {
+            submitQuizButton.addEventListener('click', () => {
+                if (!quizContainer || !quizResultsContainer) return;
+                let score = 0;
+                const totalQuestions = quizData.length;
+
+                quizData.forEach((item, index) => {
+                    const questionBlock = quizContainer.children[index];
+                    if (!questionBlock) return;
+
+                    const selectedOptionInput = questionBlock.querySelector(`input[name="question${index}"]:checked`);
+                    const optionContainers = questionBlock.querySelectorAll('.quiz-option');
+
+                    let explanationDiv = questionBlock.querySelector('.explanation');
+                    if (!explanationDiv) {
+                        explanationDiv = document.createElement('div');
+                        explanationDiv.classList.add('explanation');
+                        questionBlock.appendChild(explanationDiv);
+                    }
+
+
+                    optionContainers.forEach(container => {
+                        container.classList.remove('correct-answer', 'incorrect-answer', 'selected');
+                        const inputRadio = container.querySelector('input[type="radio"]');
+                        if (inputRadio && inputRadio.value === item.answer) {
+                            container.classList.add('correct-answer');
+                        }
+                    });
+
+                    if (selectedOptionInput) {
+                        const userAnswer = selectedOptionInput.value;
+                        const selectedOptionContainer = selectedOptionInput.closest('.quiz-option');
+
+                        if (userAnswer === item.answer) {
+                            score++;
+                            if (selectedOptionContainer) selectedOptionContainer.classList.add('correct-answer');
+                        } else {
+                            if (selectedOptionContainer) selectedOptionContainer.classList.add('incorrect-answer');
+                        }
+                        explanationDiv.innerHTML = `<strong>Explicație:</strong> ${item.explanation}`;
+                    } else {
+                        explanationDiv.innerHTML = `<strong>Nu ai selectat niciun răspuns.</strong><br><strong>Explicație:</strong> ${item.explanation}`;
+                    }
                 });
 
-                if (selectedOption) {
-                    const userAnswer = selectedOption.value;
-                    const correctAnswer = item.answer;
-                    const optionLabel = selectedOption.parentElement;
-
-                    if (userAnswer === correctAnswer) {
-                        score++;
-                        optionLabel.classList.add('correct-answer');
-                    } else {
-                        optionLabel.classList.add('incorrect-answer');
-                        questionBlock.querySelectorAll('.quiz-option input').forEach(inputEl => {
-                            if (inputEl.value === correctAnswer) {
-                                inputEl.parentElement.classList.add('correct-answer');
-                            }
-                        });
-                    }
+                quizResultsContainer.innerHTML = `Ai răspuns corect la ${score} din ${totalQuestions} întrebări. (${((score / totalQuestions) * 100).toFixed(2)}%)`;
+                if (score === totalQuestions) {
+                    quizResultsContainer.innerHTML += "<br>🎉 Felicitări! Ai răspuns corect la toate întrebările!";
+                    quizResultsContainer.classList.add('text-green-400');
+                    quizResultsContainer.classList.remove('text-red-400', 'text-yellow-400');
+                } else if (score >= totalQuestions / 2) {
+                    quizResultsContainer.innerHTML += "<br>👍 Bun rezultat! Mai poți recapitula materialele pentru a atinge perfecțiunea.";
+                    quizResultsContainer.classList.add('text-yellow-400');
+                    quizResultsContainer.classList.remove('text-red-400', 'text-green-400');
+                } else {
+                    quizResultsContainer.innerHTML += "<br>🤔 Mai ai de învățat. Recapitulează cursurile și încearcă din nou!";
+                    quizResultsContainer.classList.add('text-red-400');
+                    quizResultsContainer.classList.remove('text-yellow-400', 'text-green-400');
                 }
-                explanationDiv.classList.remove('hidden');
+                quizResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
-            quizResults.innerHTML = `Scorul tău este: <span class="text-yellow-400">${score}</span> din <span class="text-yellow-400">${quizData.length}</span>.`;
-            quizResults.scrollIntoView({ behavior: 'smooth' });
-        });
+        }
 
-        buildQuiz();
-
+        // MathJax Configuration
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -659,13 +1751,10 @@
             }
         };
 
-        (function () {
-            var script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-            script.async = true;
-            document.head.appendChild(script);
-        })();
+        // Initial section to show
+        showSection('acasa');
 
     </script>
 </body>
+
 </html>
